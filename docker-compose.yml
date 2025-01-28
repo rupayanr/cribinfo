@@ -1,0 +1,31 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: cribinfo-db
+    environment:
+      POSTGRES_USER: cribinfo
+      POSTGRES_PASSWORD: cribinfo123
+      POSTGRES_DB: cribinfo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cribinfo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: cribinfo-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@cribinfo.dev
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

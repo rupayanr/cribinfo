@@ -24,7 +24,7 @@ Housing search powered by RAG. Natural language queries like "2BHK under 1Cr wit
 - Python 3.11+
 - FastAPI (async)
 - PostgreSQL + pgvector
-- OpenAI text-embedding-3-small
+- Ollama (local LLMs + embeddings)
 - SQLAlchemy 2.0 (async)
 
 ### Infrastructure
@@ -115,8 +115,8 @@ async def search(query: str, city: str = "bangalore"):
 ## RAG Pipeline
 
 1. **User query** → "2BHK under 1Cr gym"
-2. **Parse query** (GPT-4) → Extract: bhk=2, max_price=100, amenities=[gym]
-3. **Generate embedding** → text-embedding-3-small
+2. **Parse query** (Ollama llama3.2) → Extract: bhk=2, max_price=100, amenities=[gym]
+3. **Generate embedding** → Ollama nomic-embed-text (768 dims)
 4. **Hybrid search** → Vector similarity + SQL filters + city filter
 5. **Rank & return** → Top 10 results
 
@@ -149,7 +149,7 @@ CREATE TABLE properties (
     amenities TEXT[],
     latitude DECIMAL(10, 8),
     longitude DECIMAL(11, 8),
-    embedding vector(1536)
+    embedding vector(768)  -- nomic-embed-text dimensions
 );
 
 CREATE INDEX idx_properties_city ON properties(city);
@@ -175,7 +175,7 @@ uvicorn[standard]>=0.27.0
 sqlalchemy[asyncio]>=2.0.0
 asyncpg>=0.29.0
 pgvector>=0.2.0
-openai>=1.10.0
+ollama>=0.4.0
 ```
 
 ---
@@ -209,7 +209,9 @@ uvicorn app.main:app --reload
 ### Backend (.env)
 ```
 DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/cribinfo
-OPENAI_API_KEY=sk-...
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_EMBED_MODEL=nomic-embed-text
+OLLAMA_LLM_MODEL=llama3.2
 CORS_ORIGINS=["http://localhost:5173"]
 DEFAULT_CITY=bangalore
 ```
