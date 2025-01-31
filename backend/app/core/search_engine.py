@@ -132,7 +132,9 @@ async def _search_with_filters(
         conditions.append(Property.sqft <= parsed_query.max_sqft)
 
     if use_area and parsed_query.area:
-        conditions.append(Property.area.ilike(f"%{parsed_query.area}%"))
+        # Sanitize area input - remove SQL wildcards and limit length
+        safe_area = parsed_query.area.replace("%", "").replace("_", "")[:100]
+        conditions.append(Property.area.ilike(f"%{safe_area}%"))
 
     # Build query with vector similarity ordering
     stmt = select(Property)

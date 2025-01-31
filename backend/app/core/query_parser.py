@@ -1,11 +1,15 @@
+import logging
 import ollama
 import json
 import re
 from pydantic import BaseModel
+from ollama import ResponseError
 
 from app.config import get_settings
+from app.core.exceptions import LLMError
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 
 # Area to city mapping
@@ -157,21 +161,48 @@ def infer_city_from_area(area: str | None) -> str | None:
 
 
 async def parse_query(query: str) -> ParsedQuery:
-    """Parse natural language query using Ollama LLM."""
-    response = ollama.chat(
-        model=settings.ollama_llm_model,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Query: {query}"},
-        ],
-        options={"temperature": 0},
-    )
+    """Parse natural language query using Ollama LLM.
 
-    result = extract_json(response["message"]["content"])
-    result["raw_query"] = query
+    Args:
+        query: Natural language search query
 
-    # Infer city from area
-    area = result.get("area")
-    result["inferred_city"] = infer_city_from_area(area)
+    Returns:
+        ParsedQuery with extracted filters
 
-    return ParsedQuery(**result)
+    Raises:
+        LLMError: If LLM parsing fails
+    """
+    if not query or not query.strip():
+        logger.warning("Empty query provided")
+        return ParsedQuery(raw_query="")
+
+    try:
+        response = ollama.chat(
+            model=settings.ollama_llm_model,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": f"Query: {query}"},
+            ],
+            options={"temperature": 0},
+        )
+
+        result = extract_json(response["message"]["content"])
+        result["raw_query"] = query
+
+        # Infer city from area
+        area = result.get("area")
+        result["inferred_city"] = infer_city_from_area(area)
+
+        return ParsedQuery(**result)
+
+    except ResponseError as e:
+        logger.error(f"Ollama LLM error: {e}")
+        raise LLMError(f"Query parsing service unavailable: {str(e)}")
+    except ConnectionError as e:
+        logger.error(f"Cannot connect to Ollama: {e}")
+        raise LLMError("Cannot connect to AI service. Please try again later.")
+    except Exception as e:
+        logger.exception(f"Unexpected query parsing error: {e}")
+        # Return a basic parsed query on error instead of failing completely
+        logger.info("Falling back to empty parsed query")
+        return ParsedQuery(raw_query=query)
