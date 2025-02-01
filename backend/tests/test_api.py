@@ -68,22 +68,16 @@ class TestSearchEndpoint:
 
     @pytest.mark.asyncio
     async def test_search_empty_query(self):
-        """Should handle empty query."""
-        with patch("app.api.routes.search.parse_query", new_callable=AsyncMock) as mock_parse, \
-             patch("app.api.routes.search.hybrid_search", new_callable=AsyncMock) as mock_search:
+        """Should reject empty query with validation error."""
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.post(
+                "/api/v1/search",
+                json={"query": "", "city": "", "limit": 10}
+            )
 
-            mock_parse.return_value = ParsedQuery(raw_query="")
-            mock_search.return_value = SearchResult([], "similar", [])
-
-            transport = ASGITransport(app=app)
-            async with AsyncClient(transport=transport, base_url="http://test") as client:
-                response = await client.post(
-                    "/api/v1/search",
-                    json={"query": "", "city": "", "limit": 10}
-                )
-
-        # Empty query should still work
-        assert response.status_code == 200
+        # Empty query should be rejected by validation
+        assert response.status_code == 422
 
     @pytest.mark.asyncio
     async def test_search_all_cities(self, mock_property):

@@ -1,18 +1,22 @@
+import logging
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.models.database import get_db
 from app.core.query_parser import parse_query
 from app.core.search_engine import hybrid_search
+from app.core.exceptions import DatabaseError
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class SearchRequest(BaseModel):
-    query: str
-    city: str = ""  # Empty string means all cities
-    limit: int = 10
+    query: str = Field(..., min_length=1, max_length=500)
+    city: str = Field(default="", max_length=50)
+    limit: int = Field(default=10, ge=1, le=50)
 
 
 class PropertyResponse(BaseModel):
@@ -37,14 +41,41 @@ class SearchResponse(BaseModel):
     relaxed_filters: list[str]  # Filters that were relaxed to find results
 
 
-@router.post("/search", response_model=SearchResponse)
+class ErrorResponse(BaseModel):
+    error: bool = True
+    message: str
+    type: str
+
+
+@router.post("/search", response_model=SearchResponse, responses={
+    400: {"model": ErrorResponse, "description": "Invalid input"},
+    503: {"model": ErrorResponse, "description": "Service unavailable"},
+    500: {"model": ErrorResponse, "description": "Internal server error"},
+})
 async def search_properties(
     request: SearchRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    """Search properties using natural language query."""
+    """Search properties using natural language query.
+
+    - Parses the query using AI to extract filters (BHK, price, area, amenities)
+    - Performs hybrid search combining vector similarity with SQL filters
+    - Returns results with match quality information
+    """
+    logger.info(f"Search request: query='{request.query}', city='{request.city}', limit={request.limit}")
+
+    # Parse the query
     parsed = await parse_query(request.query)
-    search_result = await hybrid_search(db, parsed, request.city, request.limit)
+    logger.debug(f"Parsed query: {parsed.model_dump()}")
+
+    # Perform search
+    try:
+        search_result = await hybrid_search(db, parsed, request.city, request.limit)
+    except SQLAlchemyError as e:
+        logger.error(f"Database error during search: {e}")
+        raise DatabaseError("Database error occurred. Please try again later.")
+
+    logger.info(f"Search completed: {len(search_result.properties)} results, match_type={search_result.match_type}")
 
     return SearchResponse(
         results=[PropertyResponse(**p.to_dict()) for p in search_result.properties],
