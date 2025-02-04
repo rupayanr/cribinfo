@@ -1,12 +1,11 @@
 import logging
-import ollama
 import json
 import re
 from pydantic import BaseModel
-from ollama import ResponseError
 
 from app.config import get_settings
 from app.core.exceptions import LLMError
+from app.providers.llm import get_llm_provider
 
 settings = get_settings()
 logger = logging.getLogger(__name__)
@@ -161,7 +160,7 @@ def infer_city_from_area(area: str | None) -> str | None:
 
 
 async def parse_query(query: str) -> ParsedQuery:
-    """Parse natural language query using Ollama LLM.
+    """Parse natural language query using LLM provider.
 
     Args:
         query: Natural language search query
@@ -177,16 +176,10 @@ async def parse_query(query: str) -> ParsedQuery:
         return ParsedQuery(raw_query="")
 
     try:
-        response = ollama.chat(
-            model=settings.ollama_llm_model,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"Query: {query}"},
-            ],
-            options={"temperature": 0},
-        )
+        llm = get_llm_provider()
+        response = await llm.chat(SYSTEM_PROMPT, f"Query: {query}")
 
-        result = extract_json(response["message"]["content"])
+        result = extract_json(response)
         result["raw_query"] = query
 
         # Infer city from area
@@ -195,12 +188,8 @@ async def parse_query(query: str) -> ParsedQuery:
 
         return ParsedQuery(**result)
 
-    except ResponseError as e:
-        logger.error(f"Ollama LLM error: {e}")
-        raise LLMError(f"Query parsing service unavailable: {str(e)}")
-    except ConnectionError as e:
-        logger.error(f"Cannot connect to Ollama: {e}")
-        raise LLMError("Cannot connect to AI service. Please try again later.")
+    except LLMError:
+        raise
     except Exception as e:
         logger.exception(f"Unexpected query parsing error: {e}")
         # Return a basic parsed query on error instead of failing completely
