@@ -1,0 +1,28 @@
+# Render Blueprint for CribInfo Backend
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: cribinfo-api
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LLM_PROVIDER
+        value: groq
+      - key: EMBEDDING_PROVIDER
+        value: none
+      - key: GROQ_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: DATABASE_URL
+        sync: false  # Set manually (Supabase connection string)
+      - key: CORS_ORIGINS
+        sync: false  # Set to your Vercel frontend URL
+      - key: DEFAULT_CITY
+        value: bangalore
+    healthCheckPath: /health
