@@ -2,6 +2,8 @@
 import logging
 from abc import ABC, abstractmethod
 
+import httpx
+
 from app.config import get_settings
 from app.core.exceptions import EmbeddingError
 
@@ -66,6 +68,54 @@ class OllamaEmbeddingProvider(EmbeddingProvider):
             raise EmbeddingError("Cannot connect to embedding service.")
 
 
+class JinaEmbeddingProvider(EmbeddingProvider):
+    """Jina AI embedding provider for production.
+
+    Free tier: 1M tokens/month
+    https://jina.ai/embeddings/
+    """
+
+    JINA_API_URL = "https://api.jina.ai/v1/embeddings"
+
+    @property
+    def dimensions(self) -> int:
+        return 768  # jina-embeddings-v3 with 768 dimensions
+
+    async def embed(self, text: str) -> list[float]:
+        if not text or not text.strip():
+            logger.warning("Empty text provided for embedding")
+            return [0.0] * self.dimensions
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    self.JINA_API_URL,
+                    headers={
+                        "Authorization": f"Bearer {settings.jina_api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": "jina-embeddings-v3",
+                        "task": "text-matching",
+                        "dimensions": 768,
+                        "input": [text],
+                    },
+                    timeout=30.0,
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data["data"][0]["embedding"]
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Jina API error: {e.response.status_code} - {e.response.text}")
+            raise EmbeddingError(f"Embedding service error: {e.response.status_code}")
+        except httpx.RequestError as e:
+            logger.error(f"Jina connection error: {e}")
+            raise EmbeddingError("Cannot connect to embedding service.")
+        except Exception as e:
+            logger.exception(f"Unexpected Jina error: {e}")
+            raise EmbeddingError("Failed to generate embedding")
+
+
 class NoOpEmbeddingProvider(EmbeddingProvider):
     """No-op embedding provider that returns zeros.
 
@@ -90,7 +140,10 @@ def get_embedding_provider() -> EmbeddingProvider:
     global _provider
 
     if _provider is None:
-        if settings.embedding_provider == "none":
+        if settings.embedding_provider == "jina":
+            logger.info("Using Jina AI embedding provider")
+            _provider = JinaEmbeddingProvider()
+        elif settings.embedding_provider == "none":
             logger.info("Using no-op embedding provider (SQL-only search)")
             _provider = NoOpEmbeddingProvider()
         else:
