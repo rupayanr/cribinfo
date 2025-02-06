@@ -15,9 +15,12 @@ class Settings(BaseSettings):
     ollama_embed_model: str = "nomic-embed-text"
     ollama_llm_model: str = "llama3.2"
 
-    # Groq settings (production)
+    # Groq settings (production LLM)
     groq_api_key: str = ""
     groq_model: str = "llama-3.1-8b-instant"
+
+    # Jina AI settings (production embeddings)
+    jina_api_key: str = ""
 
     # CORS and defaults
     cors_origins: str = '["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]'
