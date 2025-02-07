@@ -24,17 +24,17 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   }
 
   return (
-    <div className="bg-gradient-to-t from-gray-100 via-gray-50 to-transparent pt-6 pb-4 px-4">
+    <div className="bg-gradient-to-t from-gray-100 via-gray-50 to-transparent pt-4 sm:pt-6 pb-3 sm:pb-4 px-3 sm:px-4">
       <div className="max-w-3xl mx-auto">
         <div
           className={`
-            flex items-center gap-3 bg-white rounded-2xl p-2 pl-4
+            flex items-center gap-2 sm:gap-3 bg-white rounded-2xl p-1.5 sm:p-2 pl-3 sm:pl-4
             shadow-lg border-2 transition-all duration-200
             ${isFocused ? 'border-blue-400 shadow-blue-100' : 'border-gray-200 shadow-gray-200/50'}
             ${disabled ? 'opacity-60' : ''}
           `}
         >
-          <div className="text-gray-400">
+          <div className="text-gray-400 hidden sm:block">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -51,16 +51,16 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="Search for your dream home... e.g., 2BHK under 1Cr with gym"
+            placeholder="2BHK under 1Cr with gym..."
             disabled={disabled}
-            className="flex-1 py-3 text-gray-800 placeholder-gray-400 bg-transparent focus:outline-none disabled:cursor-not-allowed"
+            className="flex-1 py-2.5 sm:py-3 text-sm sm:text-base text-gray-800 placeholder-gray-400 bg-transparent focus:outline-none disabled:cursor-not-allowed min-w-0"
           />
           <button
             onClick={handleSend}
             disabled={disabled || !input.trim()}
             className={`
-              flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
-              transition-all duration-200 transform
+              flex items-center justify-center gap-2 p-2.5 sm:px-5 sm:py-3 rounded-xl font-medium text-sm
+              transition-all duration-200 transform shrink-0
               ${
                 disabled || !input.trim()
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
@@ -69,7 +69,7 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
             `}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5 sm:w-4 sm:h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -81,10 +81,10 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
                 d="M14 5l7 7m0 0l-7 7m7-7H3"
               />
             </svg>
-            Search
+            <span className="hidden sm:inline">Search</span>
           </button>
         </div>
-        <p className="text-center text-xs text-gray-400 mt-3">
+        <p className="text-center text-xs text-gray-400 mt-2 sm:mt-3 hidden sm:block">
           Try: "3BHK in Whitefield" or "Spacious flat with parking under 80L"
         </p>
       </div>
