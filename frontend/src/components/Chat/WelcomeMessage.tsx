@@ -13,10 +13,10 @@ const suggestions = [
 
 export function WelcomeMessage({ onSuggestionClick }: WelcomeMessageProps) {
   return (
-    <div className="flex flex-col items-center justify-center h-full px-4 py-12">
-      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25">
+    <div className="flex flex-col items-center justify-center h-full px-4 py-8 sm:py-12">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 sm:mb-6 shadow-lg shadow-blue-500/25">
         <svg
-          className="w-10 h-10 text-white"
+          className="w-8 h-8 sm:w-10 sm:h-10 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -30,10 +30,10 @@ export function WelcomeMessage({ onSuggestionClick }: WelcomeMessageProps) {
         </svg>
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
         Welcome to CribInfo
       </h2>
-      <p className="text-gray-500 text-center mb-8 max-w-md leading-relaxed">
+      <p className="text-gray-500 text-center mb-6 sm:mb-8 max-w-md leading-relaxed text-sm sm:text-base px-2">
         Find your perfect home using natural language. Just describe what you're
         looking for and I'll find the best matches.
       </p>
@@ -42,17 +42,17 @@ export function WelcomeMessage({ onSuggestionClick }: WelcomeMessageProps) {
         <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3 text-center">
           Try these searches
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
           {suggestions.map((suggestion) => (
             <button
               key={suggestion.text}
               onClick={() => onSuggestionClick(suggestion.text)}
-              className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:shadow-md transition-all duration-200 text-left group"
+              className="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:shadow-md transition-all duration-200 text-left group"
             >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-blue-50 transition-colors shrink-0">
                 <suggestion.Icon className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
               </div>
-              <span className="group-hover:text-blue-600 transition-colors">
+              <span className="group-hover:text-blue-600 transition-colors text-xs sm:text-sm">
                 {suggestion.text}
               </span>
             </button>

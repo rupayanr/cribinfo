@@ -13,8 +13,8 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
 
   if (isUser) {
     return (
-      <div className="flex justify-end px-4">
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl rounded-tr-sm px-5 py-3 max-w-[80%] shadow-md">
+      <div className="flex justify-end px-3 sm:px-4">
+        <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl rounded-tr-sm px-4 sm:px-5 py-2.5 sm:py-3 max-w-[85%] sm:max-w-[80%] shadow-md">
           <p className="text-sm leading-relaxed">{message.text}</p>
         </div>
       </div>
@@ -22,10 +22,10 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
   }
 
   return (
-    <div className="flex items-start gap-3 px-4">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-md">
+    <div className="flex items-start gap-2 sm:gap-3 px-3 sm:px-4">
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-md">
         <svg
-          className="w-5 h-5 text-white"
+          className="w-4 h-4 sm:w-5 sm:h-5 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -38,8 +38,8 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           />
         </svg>
       </div>
-      <div className="flex-1 max-w-[85%]">
-        <div className="bg-white rounded-2xl rounded-tl-sm px-5 py-4 shadow-sm border border-gray-100">
+      <div className="flex-1 max-w-[90%] sm:max-w-[85%]">
+        <div className="bg-white rounded-2xl rounded-tl-sm px-4 sm:px-5 py-3 sm:py-4 shadow-sm border border-gray-100">
           {message.contentType === 'error' ? (
             <div className="flex items-center gap-2 text-red-600">
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
         </div>
 
         {isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-3 sm:mt-4">
             {[1, 2, 3, 4].map((i) => (
               <PropertyCardSkeleton key={i} />
             ))}
@@ -66,7 +66,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
         {!isLoading &&
           message.properties &&
           message.properties.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-3 sm:mt-4">
               {message.properties.map((property) => (
                 <MessagePropertyCard key={property.id} property={property} />
               ))}

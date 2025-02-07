@@ -18,7 +18,7 @@ export function MessagePropertyCard({ property }: MessagePropertyCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-200 cursor-pointer group">
+    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-200 cursor-pointer group">
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1 min-w-0">
           <h4 className="font-semibold text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors">

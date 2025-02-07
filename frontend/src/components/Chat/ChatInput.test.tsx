@@ -13,7 +13,7 @@ describe('ChatInput', () => {
   it('should render input and send button', () => {
     render(<ChatInput onSend={mockOnSend} />)
 
-    expect(screen.getByPlaceholderText(/search for your dream home/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/2BHK under 1Cr/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument()
   })
 
@@ -21,7 +21,7 @@ describe('ChatInput', () => {
     const user = userEvent.setup()
     render(<ChatInput onSend={mockOnSend} />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i)
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
     await user.type(input, '2BHK under 1Cr')
     await user.click(screen.getByRole('button', { name: /search/i }))
 
@@ -32,7 +32,7 @@ describe('ChatInput', () => {
     const user = userEvent.setup()
     render(<ChatInput onSend={mockOnSend} />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i) as HTMLInputElement
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i) as HTMLInputElement
     await user.type(input, '2BHK under 1Cr')
     await user.click(screen.getByRole('button', { name: /search/i }))
 
@@ -52,7 +52,7 @@ describe('ChatInput', () => {
     const user = userEvent.setup()
     render(<ChatInput onSend={mockOnSend} />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i)
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
     await user.type(input, '   ')
     await user.click(screen.getByRole('button', { name: /search/i }))
 
@@ -62,7 +62,7 @@ describe('ChatInput', () => {
   it('should be disabled when disabled prop is true', () => {
     render(<ChatInput onSend={mockOnSend} disabled />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i)
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
     const button = screen.getByRole('button', { name: /search/i })
 
     expect(input).toBeDisabled()
@@ -73,7 +73,7 @@ describe('ChatInput', () => {
     const user = userEvent.setup()
     render(<ChatInput onSend={mockOnSend} />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i)
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
     await user.type(input, '3BHK in Whitefield{enter}')
 
     expect(mockOnSend).toHaveBeenCalledWith('3BHK in Whitefield')
@@ -83,7 +83,7 @@ describe('ChatInput', () => {
     const user = userEvent.setup()
     render(<ChatInput onSend={mockOnSend} />)
 
-    const input = screen.getByPlaceholderText(/search for your dream home/i)
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
     await user.type(input, '  2BHK under 1Cr  ')
     await user.click(screen.getByRole('button', { name: /search/i }))
 
