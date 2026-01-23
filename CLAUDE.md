@@ -1,0 +1,249 @@
+# CLAUDE.md — CribInfo
+
+## Project Overview
+
+Housing search powered by RAG. Natural language queries like "2BHK under 1Cr with gym" return relevant property recommendations. Starting with Bangalore, extensible to other cities.
+
+**Owner:** Rupayan Roy  
+**Timeline:** Weeks 10–11 (Mar 24 – Apr 6)  
+**Live URL:** cribinfo.rupayan.dev (planned)  
+**Design Doc:** `docs/cribinfo-design.md`
+
+---
+
+## Tech Stack
+
+### Frontend
+- React 18 + TypeScript
+- Vite
+- Leaflet + React-Leaflet (maps)
+- Tailwind CSS
+- Zustand (state)
+
+### Backend
+- Python 3.11+
+- FastAPI (async)
+- PostgreSQL + pgvector
+- OpenAI text-embedding-3-small
+- SQLAlchemy 2.0 (async)
+
+### Infrastructure
+- Vercel (frontend)
+- Railway (backend)
+- Neon (PostgreSQL with pgvector)
+
+---
+
+## Project Structure
+
+```
+cribinfo/
+├── CLAUDE.md
+├── README.md
+├── docs/
+│   └── cribinfo-design.md
+├── frontend/
+│   ├── package.json
+│   └── src/
+│       ├── main.tsx
+│       ├── App.tsx
+│       ├── components/
+│       │   ├── Search/
+│       │   │   ├── SearchBar.tsx
+│       │   │   ├── Filters.tsx
+│       │   │   └── CitySelector.tsx
+│       │   ├── Property/
+│       │   │   ├── PropertyCard.tsx
+│       │   │   ├── PropertyGrid.tsx
+│       │   │   └── CompareView.tsx
+│       │   └── Map/
+│       │       └── PropertyMap.tsx
+│       ├── hooks/
+│       │   ├── useSearch.ts
+│       │   └── useCompare.ts
+│       └── stores/
+│           └── searchStore.ts
+└── backend/
+    ├── requirements.txt
+    ├── Dockerfile
+    ├── scripts/
+    │   ├── load_data.py
+    │   └── generate_embeddings.py
+    ├── data/
+    │   └── bangalore/
+    │       └── housing.csv
+    └── app/
+        ├── main.py
+        ├── config.py
+        ├── api/
+        │   └── routes/
+        │       ├── search.py
+        │       ├── properties.py
+        │       └── cities.py
+        ├── core/
+        │   ├── embeddings.py
+        │   ├── query_parser.py
+        │   └── search_engine.py
+        ├── models/
+        │   └── property.py
+        └── repositories/
+            └── property_repo.py
+```
+
+---
+
+## Multi-City Architecture
+
+```python
+# Properties table supports multiple cities
+class Property(Base):
+    id: UUID
+    city: str  # "bangalore", "mumbai", "delhi", etc.
+    area: str
+    # ... rest of fields
+```
+
+```python
+# Search endpoint accepts city
+@router.post("/search")
+async def search(query: str, city: str = "bangalore"):
+    ...
+```
+
+---
+
+## RAG Pipeline
+
+1. **User query** → "2BHK under 1Cr gym"
+2. **Parse query** (GPT-4) → Extract: bhk=2, max_price=100, amenities=[gym]
+3. **Generate embedding** → text-embedding-3-small
+4. **Hybrid search** → Vector similarity + SQL filters + city filter
+5. **Rank & return** → Top 10 results
+
+---
+
+## API Endpoints
+
+```
+POST /api/v1/search              # NLP search (with city param)
+GET  /api/v1/properties/{id}     # Property details
+POST /api/v1/compare             # Compare properties
+GET  /api/v1/cities              # List available cities
+GET  /api/v1/cities/{city}/areas # Areas in a city
+```
+
+---
+
+## Database Schema
+
+```sql
+CREATE TABLE properties (
+    id UUID PRIMARY KEY,
+    city VARCHAR(50) NOT NULL,
+    title VARCHAR(255),
+    area VARCHAR(100),
+    bhk INTEGER,
+    sqft INTEGER,
+    bathrooms INTEGER,
+    price_lakhs DECIMAL(10, 2),
+    amenities TEXT[],
+    latitude DECIMAL(10, 8),
+    longitude DECIMAL(11, 8),
+    embedding vector(1536)
+);
+
+CREATE INDEX idx_properties_city ON properties(city);
+```
+
+---
+
+## Key Dependencies
+
+### Frontend
+```json
+{
+  "react-leaflet": "^4.2",
+  "leaflet": "^1.9",
+  "zustand": "^4.5"
+}
+```
+
+### Backend
+```
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+sqlalchemy[asyncio]>=2.0.0
+asyncpg>=0.29.0
+pgvector>=0.2.0
+openai>=1.10.0
+```
+
+---
+
+## Commands
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Backend
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Load data (one-time, per city)
+python scripts/load_data.py --city bangalore
+
+uvicorn app.main:app --reload
+```
+
+---
+
+## Environment Variables
+
+### Backend (.env)
+```
+DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/cribinfo
+OPENAI_API_KEY=sk-...
+CORS_ORIGINS=["http://localhost:5173"]
+DEFAULT_CITY=bangalore
+```
+
+### Frontend (.env)
+```
+VITE_API_URL=http://localhost:8000
+```
+
+---
+
+## Adding a New City
+
+1. Add dataset to `data/{city}/housing.csv`
+2. Run `python scripts/load_data.py --city {city}`
+3. City auto-appears in dropdown
+
+---
+
+## Data Sources
+
+| City | Source |
+|------|--------|
+| Bangalore | Kaggle Bangalore House Price Dataset |
+| Mumbai | (future) |
+| Delhi | (future) |
+
+---
+
+## Milestones
+
+- [ ] Week 10: Data loading, embeddings, RAG search
+- [ ] Week 11: UI, map view, compare feature, deploy
+
+---
+
+*Last updated: January 2025*
