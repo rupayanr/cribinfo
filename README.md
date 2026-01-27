@@ -127,4 +127,4 @@ MIT
 
 ---
 
-Made with 🏠 by [Rupayan Roy](https://linkedin.com/in/rupayan-roy)
+Made with ❤️ by [Rupayan Roy](https://linkedin.com/in/rupayan-roy)
