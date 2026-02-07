@@ -3,16 +3,21 @@ import { useSearchStore } from '../../stores/searchStore'
 import type { Property } from '../../types'
 import L from 'leaflet'
 import { useCompare } from '../../hooks/useCompare'
+import 'leaflet/dist/leaflet.css'
 
 // Fix for default marker icons in React-Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png'
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
+  iconRetinaUrl: iconRetina,
   shadowUrl: iconShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 })
 
 L.Marker.prototype.options.icon = DefaultIcon
@@ -110,11 +115,11 @@ export function PropertyMap({ onPropertySelect }: PropertyMapProps) {
   return (
     <div className="h-full w-full relative">
       {/* Header overlay - centered */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000]">
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-2 border border-gray-200">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[400] pointer-events-none">
+        <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl shadow-lg px-4 py-2 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               {propertiesWithCoords.length} properties on map
             </span>
           </div>
@@ -123,15 +128,15 @@ export function PropertyMap({ onPropertySelect }: PropertyMapProps) {
 
       {/* Empty state */}
       {propertiesWithCoords.length === 0 && (
-        <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-gray-900/10 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-sm mx-4">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="absolute inset-0 z-[500] flex items-center justify-center bg-gray-900/10 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center max-w-sm mx-4">
+            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No properties to display</h3>
-            <p className="text-gray-500 text-sm">Search for properties to see them on the map</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">No properties to display</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Search for properties to see them on the map</p>
           </div>
         </div>
       )}

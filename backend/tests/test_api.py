@@ -244,3 +244,35 @@ class TestSearchResponse:
         assert "amenities" in prop
         assert "latitude" in prop
         assert "longitude" in prop
+
+
+class TestSearchDatabaseError:
+    """Tests for database error handling in search endpoint."""
+
+    @pytest.mark.asyncio
+    async def test_search_database_error(self):
+        """Should handle database errors gracefully."""
+        from sqlalchemy.exc import SQLAlchemyError
+
+        mock_parsed = ParsedQuery(
+            bhk=2,
+            raw_query="2BHK flat"
+        )
+
+        with patch("app.api.routes.search.parse_query", new_callable=AsyncMock) as mock_parse, \
+             patch("app.api.routes.search.hybrid_search", new_callable=AsyncMock) as mock_search:
+
+            mock_parse.return_value = mock_parsed
+            mock_search.side_effect = SQLAlchemyError("Connection failed")
+
+            transport = ASGITransport(app=app)
+            async with AsyncClient(transport=transport, base_url="http://test") as client:
+                response = await client.post(
+                    "/api/v1/search",
+                    json={"query": "2BHK flat", "city": "bangalore", "limit": 10}
+                )
+
+        assert response.status_code == 503
+        data = response.json()
+        assert "error" in data
+        assert data["type"] == "DatabaseError"

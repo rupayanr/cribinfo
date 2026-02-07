@@ -26,7 +26,15 @@ Demonstrates RAG pipeline expertise, embeddings, pgvector, and creates something
 - [ ] Price trend insights by area
 - [ ] Commute time calculator
 - [ ] Similar property recommendations
-- [ ] More cities (Mumbai, Delhi, etc.)
+- [x] More cities (Mumbai, Delhi) ✓
+
+### Security (Implemented)
+
+- [x] Content Security Policy (no unsafe-eval)
+- [x] HTTPS enforcement (HSTS)
+- [x] Rate limiting on all endpoints
+- [x] Production CORS restrictions
+- [x] Error message sanitization
 
 ---
 
@@ -76,10 +84,12 @@ Demonstrates RAG pipeline expertise, embeddings, pgvector, and creates something
 |-------|------------|-----------|
 | Frontend | React + TypeScript | Consistency |
 | Maps | Leaflet + React-Leaflet | Free, no API key |
-| Backend | FastAPI | Async, fast |
+| Backend | FastAPI + slowapi | Async, fast, rate limited |
 | Database | PostgreSQL + pgvector | Vector similarity search |
-| Embeddings | OpenAI text-embedding-3-small | Good quality, cheap |
+| LLM | Ollama (dev) / Groq (prod) | Local dev, fast prod |
+| Embeddings | Ollama (dev) / Jina (prod) | 768 dims, free tiers |
 | Hosting | Vercel + Railway | Free tiers |
+| Security | CSP, HSTS, CORS | Production-ready |
 
 ---
 
@@ -393,11 +403,38 @@ cribinfo/backend/
 
 ## Milestones
 
-| Week | Goal | Deliverable |
-|------|------|-------------|
-| 10 | Data + RAG pipeline | NLP search working |
-| 11 | UI + Map + Deploy | **CribInfo shipped** |
+| Week | Goal | Deliverable | Status |
+|------|------|-------------|--------|
+| 10 | Data + RAG pipeline | NLP search working | ✅ Done |
+| 11 | UI + Map + Deploy | **CribInfo shipped** | ✅ Done |
+| 12 | Security hardening | CSP, HSTS, rate limiting | ✅ Done |
 
 ---
 
-*Last updated: January 2025*
+## Security Implementation
+
+### Rate Limiting
+
+| Endpoint | Limit |
+|----------|-------|
+| POST /api/v1/search | 30/minute |
+| GET /api/v1/properties/{id} | 60/minute |
+| POST /api/v1/compare | 30/minute |
+| GET /api/v1/cities | 60/minute |
+| GET /api/v1/cities/{city}/areas | 60/minute |
+
+### Security Headers (Vercel)
+
+```json
+{
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(self)",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY"
+}
+```
+
+---
+
+*Last updated: February 2026*

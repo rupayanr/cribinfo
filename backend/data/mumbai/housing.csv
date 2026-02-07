@@ -1,16 +1,76 @@
 title,area,bhk,sqft,bathrooms,price_lakhs,amenities,latitude,longitude
-Sea View Luxury Apartment,Bandra West,3,1600,3,450,gym|swimming pool|parking|security|sea view,19.0596,72.8295
-Modern High Rise Flat,Andheri West,2,1100,2,185,gym|parking|power backup|clubhouse,19.1368,72.8267
-Premium Penthouse,Worli,4,3200,4,1200,gym|swimming pool|concierge|parking|sea view|terrace,19.0176,72.8151
-Budget Apartment,Thane West,2,850,2,65,parking|security|power backup,19.2183,72.9781
-Spacious Family Home,Powai,3,1800,3,280,gym|swimming pool|clubhouse|parking|lake view,19.1176,72.9060
-Cozy Studio,Lower Parel,1,520,1,95,gym|parking|security,19.0046,72.8297
-New Launch Tower,Goregaon East,3,1450,3,165,gym|swimming pool|parking|children play area,19.1663,72.8526
-Beachfront Apartment,Juhu,3,1700,3,520,gym|parking|security|beach access,19.1075,72.8263
-Tech Hub Adjacent,Vikhroli,2,1000,2,88,gym|parking|power backup,19.1120,72.9272
-Gated Community Villa,Mulund West,4,2800,4,320,swimming pool|gym|clubhouse|garden|security,19.1726,72.9425
-Affordable Housing,Navi Mumbai,2,900,2,55,parking|security,19.0330,73.0297
-Executive Apartment,Nariman Point,2,1200,2,380,gym|parking|concierge|security|sea view,18.9256,72.8242
-Green Living Complex,Kandivali East,3,1350,2,110,gym|parking|garden|rainwater harvesting,19.2047,72.8685
-Student Housing,Dadar,1,450,1,72,security|wifi|laundry,19.0178,72.8478
-Senior Living,Chembur,2,1100,2,125,gym|medical facility|garden|security|elevator,19.0522,72.8994
+Ultra-Modern Flat in Lower Parel,Lower Parel,1,439,1,95,parking|security|power backup|lift|gym|children play area|rainwater harvesting|cctv|intercom|visitor parking|concierge|pet friendly|gated community|vastu compliant,18.995924,72.821811
+Exquisite Powai in Prime Location,Powai,4,2052,5,390,parking|security|power backup|lift|gym|clubhouse|rainwater harvesting|fire safety|cctv|intercom|visitor parking|jogging track|gated community,19.104338,72.919002
+Stylish Duplex in Goregaon,Goregaon,3,1759,3,250,security|power backup|lift|gym|swimming pool|garden|fire safety|cctv|visitor parking|indoor games,19.174587,72.865085
+Spacious Family Apartment in Andheri West,Andheri West,1,622,1,75,parking|security|power backup|gym|clubhouse|intercom|visitor parking|party hall|solar panels|vastu compliant,19.13255,72.834396
+Updated Chembur Near Metro,Chembur,2,852,2,90,parking|security|lift|gym|garden|intercom|visitor parking|indoor games|meditation room,19.062057,72.892578
+Contemporary Lower Parel with Amenities,Lower Parel,1,404,2,70,parking|security|power backup|lift|gym|clubhouse|fire safety|cctv|intercom|visitor parking|party hall|pet friendly|vastu compliant,18.990066,72.815564
+Spacious Family Builder Floor in Vashi,Vashi,2,1066,3,100,parking|power backup|lift|gym|garden|fire safety|cctv|intercom|party hall|gated community,19.071993,73.008442
+Designer Flat in Lower Parel,Lower Parel,2,935,2,145,parking|security|power backup|lift|gym|garden|rainwater harvesting|fire safety|cctv|visitor parking|party hall|concierge|solar panels|pet friendly|vastu compliant,19.004713,72.847768
+Compact Studio in Kandivali,Kandivali,1,532,1,48.7,parking|power backup|lift|garden|clubhouse|rainwater harvesting|fire safety|intercom|visitor parking|indoor games|ev charging|gated community,19.193627,72.83667
+Newly Renovated Bungalow in Mulund,Mulund,4,2310,4,250,parking|security|power backup|lift|clubhouse|rainwater harvesting|intercom|party hall|gated community,19.167368,72.968724
+Premium Powai with City View,Powai,4,2284,5,560,parking|security|power backup|lift|garden|clubhouse|fire safety|cctv|intercom|visitor parking|jogging track|meditation room|ev charging|vastu compliant,19.127487,72.918486
+Smart Home Penthouse in Andheri West,Andheri West,4,2565,5,340,parking|security|lift|gym|garden|clubhouse|cctv|intercom|party hall|concierge,19.134773,72.863248
+Contemporary Kandivali with Amenities,Kandivali,2,853,3,85,parking|security|lift|swimming pool|fire safety|cctv|intercom|visitor parking|jogging track|tennis court|gated community,19.191338,72.85996
+Well-Maintained Apartment in Goregaon,Goregaon,2,933,2,90,parking|security|power backup|lift|swimming pool|rainwater harvesting|cctv|visitor parking|jogging track|indoor games|gated community,19.161285,72.849991
+Smart Home Apartment in Borivali,Borivali,2,1120,3,115,parking|security|power backup|lift|swimming pool|garden|rainwater harvesting|fire safety|cctv|visitor parking|concierge|pet friendly|gated community,19.242981,72.868174
+Affordable Flat in Mulund,Mulund,2,1151,3,100,parking|security|power backup|gym|rainwater harvesting|visitor parking|indoor games|meditation room,19.174631,72.958376
+Well-Maintained Villa in Mulund,Mulund,4,2738,4,260,parking|security|power backup|lift|gym|fire safety|cctv|visitor parking|party hall|gated community,19.181456,72.971665
+Premium Bandra West with City View,Bandra West,4,2491,5,460,parking|security|power backup|gym|swimming pool|children play area|fire safety|cctv|intercom|party hall|ev charging|vastu compliant,19.07312,72.818715
+Smart Home Studio in Bandra West,Bandra West,1,633,1,165,parking|security|power backup|lift|gym|swimming pool|garden|rainwater harvesting|cctv|intercom|visitor parking,19.07274,72.846334
+Stylish Villa in Lower Parel,Lower Parel,3,1335,3,290,parking|security|power backup|lift|garden|clubhouse|children play area|rainwater harvesting|fire safety|cctv|visitor parking|jogging track|pet friendly|gated community,19.003626,72.848295
+Stylish Apartment in Thane,Thane,3,1353,3,210,parking|security|power backup|lift|children play area|fire safety|cctv|jogging track|indoor games,19.217247,72.986782
+Well-Maintained Villa in Mulund,Mulund,3,1981,3,210,security|power backup|lift|fire safety|cctv|indoor games|meditation room|pet friendly,19.185659,72.944981
+Studio with City View,Goregaon,1,490,2,65,parking|security|lift|clubhouse|fire safety|intercom|visitor parking|jogging track|indoor games|vastu compliant,19.159313,72.836935
+Value-for-Money Apartment in Navi Mumbai,Navi Mumbai,1,633,2,49.0,security|swimming pool|children play area|cctv|intercom|jogging track|pet friendly|gated community,19.028685,73.031404
+Ultra-Modern Builder Floor in Powai,Powai,2,905,2,165,parking|security|power backup|lift|gym|garden|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|party hall|ev charging|gated community,19.117388,72.922196
+Corner Andheri West with Parking,Andheri West,3,1940,3,300,parking|security|lift|gym|children play area|fire safety|cctv|jogging track|gated community|vastu compliant,19.131698,72.853243
+Exquisite Worli in Prime Location,Worli,2,1132,2,180,parking|security|power backup|lift|gym|children play area|rainwater harvesting|fire safety|cctv|intercom|tennis court|meditation room|concierge,19.018433,72.822628
+Modern Studio in Borivali,Borivali,1,527,2,60,parking|security|lift|swimming pool|clubhouse|cctv|intercom|visitor parking|tennis court|indoor games,19.22722,72.839973
+Spacious Family Villa in Vashi,Vashi,3,1293,4,130,parking|security|power backup|lift|cctv|visitor parking|tennis court,19.081095,72.98744
+Smart Home Bungalow in Worli,Worli,4,2241,5,560,parking|security|power backup|lift|gym|garden|children play area|fire safety|intercom|gated community,19.014669,72.819328
+Vastu-Compliant Duplex in Thane,Thane,3,1480,4,240,security|power backup|lift|garden|cctv|intercom|gated community|vastu compliant,19.224579,72.992293
+Corner Kharghar with Parking,Kharghar,3,1632,3,135,parking|security|lift|swimming pool|garden|fire safety|intercom|jogging track|gated community,19.064158,73.084247
+Well-Maintained Apartment in Mulund,Mulund,2,827,2,80,parking|lift|gym|fire safety|intercom|tennis court|party hall|concierge|vastu compliant,19.160121,72.950108
+Compact Apartment in Kharghar,Kharghar,1,554,2,55,parking|security|clubhouse|fire safety|gated community,19.062689,73.083136
+Budget-Friendly Mulund Near Schools,Mulund,2,1170,3,65,parking|power backup|lift|children play area|rainwater harvesting,19.171131,72.950436
+Furnished Studio Near Metro,Bandra West,1,491,2,105,parking|security|power backup|lift|gym|garden|fire safety|intercom|jogging track|indoor games|concierge,19.052212,72.83433
+Compact Builder Floor in Kharghar,Kharghar,2,1268,3,135,parking|power backup|lift|clubhouse|children play area|cctv|jogging track|party hall|solar panels,19.032109,73.052621
+Premium Lower Parel with City View,Lower Parel,3,1538,4,250,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|fire safety|cctv|intercom|visitor parking|jogging track|concierge|gated community|vastu compliant,19.010317,72.844927
+Budget-Friendly Mulund Near Schools,Mulund,1,500,2,46.8,parking|children play area|rainwater harvesting|fire safety|gated community|vastu compliant,19.16032,72.958891
+Corner Vashi with Parking,Vashi,3,1349,4,140,parking|power backup|lift|gym|cctv|visitor parking|vastu compliant,19.07769,72.993399
+Contemporary Lower Parel with Amenities,Lower Parel,4,2787,4,580,parking|security|power backup|lift|gym|swimming pool|garden|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|jogging track|tennis court|meditation room|party hall|ev charging|pet friendly|gated community|vastu compliant,19.00158,72.834292
+Smart Home Flat in Malad,Malad,1,545,1,60,parking|security|power backup|lift|gym|swimming pool|fire safety|jogging track|indoor games|meditation room|gated community,19.196195,72.83394
+Newly Renovated Apartment in Kharghar,Kharghar,3,1817,3,185,security|power backup|lift|gym|garden|jogging track,19.043197,73.056484
+Stylish Villa in Worli,Worli,4,2541,4,420,parking|security|power backup|lift|gym|swimming pool|children play area|fire safety|cctv|intercom|visitor parking|jogging track|gated community|vastu compliant,19.005374,72.832141
+Contemporary Andheri West with Amenities,Andheri West,1,474,2,75,parking|security|power backup|lift|gym|fire safety|concierge|gated community|vastu compliant,19.137503,72.856478
+Smart Home Flat in Worli,Worli,2,1007,2,210,parking|security|power backup|lift|garden|children play area|fire safety|intercom|visitor parking|tennis court|indoor games,19.027329,72.824678
+Premium Lower Parel with City View,Lower Parel,5,4687,5,960,parking|security|power backup|lift|gym|garden|clubhouse|children play area|fire safety|cctv|intercom|jogging track|indoor games|party hall|ev charging|gated community,18.987433,72.821289
+Updated Kandivali Near Metro,Kandivali,2,982,2,145,parking|security|lift|gym|children play area|rainwater harvesting|visitor parking|jogging track|gated community|vastu compliant,19.213844,72.846061
+Designer Apartment in Bandra West,Bandra West,3,1890,3,360,parking|security|power backup|lift|gym|swimming pool|clubhouse|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|gated community,19.047946,72.829486
+Corner Vashi with Parking,Vashi,5,4917,6,470,parking|security|power backup|lift|swimming pool|fire safety|cctv|tennis court|indoor games|pet friendly,19.072814,72.991007
+Luxury Duplex in Powai,Powai,3,1371,4,270,parking|security|power backup|lift|gym|swimming pool|rainwater harvesting|fire safety|cctv|indoor games|party hall|gated community|vastu compliant,19.119345,72.888932
+Bright & Airy Flat in Chembur,Chembur,2,842,2,90,parking|security|lift|gym|swimming pool|clubhouse|rainwater harvesting|intercom|indoor games,19.053629,72.91038
+Bright & Airy Builder Floor in Goregaon,Goregaon,2,1011,3,100,parking|security|power backup|lift|gym|rainwater harvesting|gated community,19.175054,72.863728
+Affordable Flat in Vashi,Vashi,2,835,2,50,parking|security|power backup|garden|children play area|fire safety|cctv|visitor parking|jogging track|tennis court|pet friendly|gated community,19.087033,72.983254
+Modern Apartment in Thane,Thane,2,1258,3,185,parking|security|power backup|lift|clubhouse|fire safety|intercom|meditation room|pet friendly,19.22309,72.971776
+Value-for-Money Flat in Navi Mumbai,Navi Mumbai,2,1099,2,85,parking|swimming pool|fire safety|visitor parking|meditation room,19.041086,73.020716
+Updated Malad Near Metro,Malad,1,624,2,80,parking|security|power backup|lift|gym|children play area|fire safety|pet friendly,19.174636,72.840785
+Bright & Airy Builder Floor in Goregaon,Goregaon,2,856,2,110,parking|security|power backup|gym|garden|fire safety|intercom|visitor parking|tennis court|ev charging|pet friendly,19.150383,72.856814
+Vastu-Compliant Villa in Malad,Malad,3,1272,4,120,parking|security|power backup|lift|gym|swimming pool|fire safety|meditation room,19.199527,72.845441
+Value-for-Money Villa in Vashi,Vashi,3,1943,4,170,parking|security|gym|visitor parking|meditation room|vastu compliant,19.064707,72.990231
+Updated Thane Near Metro,Thane,4,2277,5,340,parking|security|power backup|lift|garden|cctv|intercom|tennis court|indoor games|gated community,19.211265,72.961566
+Luxury Villa in Powai,Powai,3,1534,3,250,parking|lift|gym|swimming pool|garden|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|vastu compliant,19.127574,72.899636
+Corner Andheri West with Parking,Andheri West,4,2030,5,240,parking|security|power backup|lift|gym|children play area|rainwater harvesting|fire safety|intercom|visitor parking|indoor games|meditation room|pet friendly|vastu compliant,19.113542,72.855049
+Compact Flat in Mulund,Mulund,2,1067,3,90,parking|gym|children play area|rainwater harvesting|cctv|jogging track,19.185817,72.957637
+Value-for-Money Apartment in Mulund,Mulund,2,1294,3,110,security|lift|garden|intercom|visitor parking|gated community,19.175227,72.95385
+Bright & Airy Apartment in Kandivali,Kandivali,2,968,3,125,parking|security|power backup|swimming pool|children play area|cctv|meditation room|gated community,19.216758,72.83333
+Vastu-Compliant Flat in Chembur,Chembur,2,1113,3,150,parking|security|power backup|lift|gym|garden|fire safety|cctv|intercom|visitor parking|pet friendly|gated community,19.05897,72.912617
+Designer Penthouse in Worli,Worli,4,2629,4,580,parking|security|power backup|lift|gym|garden|children play area|rainwater harvesting|fire safety|cctv|visitor parking|indoor games|ev charging|vastu compliant,19.021677,72.799348
+Designer Duplex in Powai,Powai,3,1674,4,260,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|children play area|fire safety|intercom|visitor parking|indoor games|party hall|solar panels,19.101164,72.89414
+Vastu-Compliant Builder Floor in Vashi,Vashi,2,1137,2,70,parking|power backup|lift|garden|clubhouse|fire safety|intercom|gated community,19.079174,73.010421
+Compact Studio in Powai,Powai,1,428,2,65,parking|security|power backup|lift|swimming pool|garden|clubhouse|fire safety|cctv|visitor parking|meditation room|solar panels|vastu compliant,19.118575,72.906888
+Smart Home Duplex in Kandivali,Kandivali,3,1259,3,165,security|power backup|lift|rainwater harvesting|fire safety|cctv|pet friendly|gated community,19.203602,72.841511
+Smart Home Villa in Borivali,Borivali,3,1417,3,195,parking|security|power backup|lift|gym|garden|children play area|intercom|meditation room|party hall|gated community,19.23304,72.863122
+Luxury Duplex in Bandra West,Bandra West,3,1413,4,350,parking|security|lift|gym|rainwater harvesting|fire safety|intercom|tennis court|party hall|pet friendly|gated community,19.059816,72.840276
+Exquisite Powai in Prime Location,Powai,4,2189,5,570,parking|security|power backup|lift|children play area|fire safety|cctv|intercom|visitor parking|meditation room|concierge|pet friendly|gated community|vastu compliant,19.106521,72.897951

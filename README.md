@@ -1,6 +1,6 @@
 # CribInfo
 
-Housing search powered by AI. Currently serving Bangalore, more cities coming soon.
+Housing search powered by AI. Search for properties using natural language across multiple cities.
 
 ![CribInfo Preview](preview.png)
 
@@ -9,20 +9,21 @@ Housing search powered by AI. Currently serving Bangalore, more cities coming so
 - **Natural Language Search** — "2BHK under 1Cr with gym"
 - **Smart Filters** — Auto-extracts BHK, price, area, amenities
 - **Map View** — See properties on an interactive map
-- **Compare** — Side-by-side property comparison
-- **Multi-City** — Extensible to any city
+- **Compare** — Side-by-side property comparison (Cards & Table views)
+- **Multi-City** — Bangalore, Mumbai, Delhi supported
+- **Secure** — Rate limiting, HTTPS, CSP protection
 
 ## 🛠 Tech Stack
 
-**Frontend:** React, TypeScript, Leaflet, Tailwind  
-**Backend:** FastAPI, PostgreSQL, pgvector  
-**AI:** OpenAI Embeddings + GPT-4 query parsing
+**Frontend:** React, TypeScript, Leaflet, Tailwind
+**Backend:** FastAPI, PostgreSQL, pgvector
+**AI:** Ollama/Groq LLM + Jina/Ollama Embeddings
 
 ## 🏙️ Available Cities
 
-- [x] Bangalore (~13k listings)
-- [ ] Mumbai (coming soon)
-- [ ] Delhi (coming soon)
+- [x] Bangalore (75 listings)
+- [x] Mumbai (75 listings)
+- [x] Delhi (75 listings)
 
 ## 🚀 Quick Start
 
@@ -97,13 +98,22 @@ cribinfo/
 **Backend (.env):**
 ```
 DATABASE_URL=postgresql+asyncpg://...
-OPENAI_API_KEY=sk-...
+ENVIRONMENT=development  # or "production"
+LLM_PROVIDER=ollama      # or "groq"
+EMBEDDING_PROVIDER=ollama # or "jina"
+GROQ_API_KEY=gsk-...     # for production
+JINA_API_KEY=jina_...    # for production embeddings
 ```
 
 **Frontend (.env):**
 ```
 VITE_API_URL=http://localhost:8000
 ```
+
+**Production Notes:**
+- HTTPS is enforced via HSTS headers
+- CORS is restricted to production domain
+- Rate limiting: 30 req/min (search), 60 req/min (other endpoints)
 
 ## 📊 API
 

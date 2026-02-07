@@ -1,10 +1,23 @@
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, distinct
 from sqlalchemy.ext.asyncio import AsyncSession
 from pgvector.sqlalchemy import Vector
 
 from app.models.property import Property
 from app.core.query_parser import ParsedQuery
 from app.core.embeddings import generate_embedding
+
+
+def deduplicate_properties(properties: list[Property]) -> list[Property]:
+    """Remove duplicate properties based on title and area."""
+    seen = set()
+    unique = []
+    for prop in properties:
+        # Create a key based on title, area, bhk, and price to identify duplicates
+        key = (prop.title, prop.area, prop.bhk, prop.price_lakhs)
+        if key not in seen:
+            seen.add(key)
+            unique.append(prop)
+    return unique
 
 
 class SearchResult:
@@ -145,7 +158,8 @@ async def _search_with_filters(
     stmt = stmt.order_by(Property.embedding.cosine_distance(query_embedding)).limit(limit)
 
     result = await db.execute(stmt)
-    return list(result.scalars().all())
+    properties = list(result.scalars().all())
+    return deduplicate_properties(properties)
 
 
 async def filter_search(
@@ -172,7 +186,9 @@ async def filter_search(
     if max_price:
         conditions.append(Property.price_lakhs <= max_price)
     if area:
-        conditions.append(Property.area.ilike(f"%{area}%"))
+        # Sanitize area input - remove SQL wildcards and limit length
+        safe_area = area.replace("%", "").replace("_", "")[:100]
+        conditions.append(Property.area.ilike(f"%{safe_area}%"))
 
     stmt = select(Property)
 
@@ -182,4 +198,5 @@ async def filter_search(
     stmt = stmt.order_by(Property.price_lakhs).limit(limit)
 
     result = await db.execute(stmt)
-    return list(result.scalars().all())
+    properties = list(result.scalars().all())
+    return deduplicate_properties(properties)

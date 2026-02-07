@@ -89,4 +89,44 @@ describe('ChatInput', () => {
 
     expect(mockOnSend).toHaveBeenCalledWith('2BHK under 1Cr')
   })
+
+  it('should render city selection prompt when city is not selected', () => {
+    render(<ChatInput onSend={mockOnSend} citySelected={false} />)
+    expect(screen.getByText(/select a city to start/i)).toBeInTheDocument()
+  })
+
+  it('should call onSelectCity when city selection button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockOnSelectCity = vi.fn()
+
+    render(<ChatInput onSend={mockOnSend} citySelected={false} onSelectCity={mockOnSelectCity} />)
+
+    const selectCityButton = screen.getByText(/select a city to start/i).closest('button')
+    await user.click(selectCityButton!)
+
+    expect(mockOnSelectCity).toHaveBeenCalled()
+  })
+
+  it('should show helper text with suggestions', () => {
+    render(<ChatInput onSend={mockOnSend} citySelected={true} />)
+    expect(screen.getByText(/try:/i)).toBeInTheDocument()
+  })
+
+  it('should not submit on Shift+Enter', async () => {
+    const user = userEvent.setup()
+    render(<ChatInput onSend={mockOnSend} />)
+
+    const input = screen.getByPlaceholderText(/2BHK under 1Cr/i)
+    await user.type(input, '3BHK in Whitefield')
+    await user.keyboard('{Shift>}{Enter}{/Shift}')
+
+    expect(mockOnSend).not.toHaveBeenCalled()
+  })
+
+  it('should disable input when city is not selected', () => {
+    render(<ChatInput onSend={mockOnSend} citySelected={false} />)
+
+    // When city is not selected, the input is replaced with city selection prompt
+    expect(screen.queryByPlaceholderText(/2BHK under 1Cr/i)).not.toBeInTheDocument()
+  })
 })

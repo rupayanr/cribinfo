@@ -1,9 +1,9 @@
 export function TypingIndicator() {
   return (
     <div className="flex items-start gap-3 px-4" data-testid="typing-indicator">
-      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+      <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
         <svg
-          className="w-4 h-4 text-blue-600"
+          className="w-4 h-4 text-blue-600 dark:text-blue-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -16,11 +16,11 @@ export function TypingIndicator() {
           />
         </svg>
       </div>
-      <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-tl-sm px-4 py-3">
         <div className="flex gap-1">
-          <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]" data-testid="typing-dot" />
-          <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]" data-testid="typing-dot" />
-          <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" data-testid="typing-dot" />
+          <span className="w-2 h-2 bg-gray-400 dark:bg-gray-600 rounded-full animate-bounce [animation-delay:-0.3s]" data-testid="typing-dot" />
+          <span className="w-2 h-2 bg-gray-400 dark:bg-gray-600 rounded-full animate-bounce [animation-delay:-0.15s]" data-testid="typing-dot" />
+          <span className="w-2 h-2 bg-gray-400 dark:bg-gray-600 rounded-full animate-bounce" data-testid="typing-dot" />
         </div>
       </div>
     </div>

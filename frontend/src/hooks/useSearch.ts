@@ -86,14 +86,38 @@ function generateResponseText(
   return `I found ${count} properties for ${criteria}:`
 }
 
-function getErrorMessage(status: number, apiError?: ApiError): string {
-  if (apiError?.message) {
-    return apiError.message
-  }
+// Whitelist of safe error messages that can be shown to users
+const SAFE_ERROR_MESSAGES = new Set([
+  'Invalid search query. Please try again with different terms.',
+  'Too many requests. Please wait a moment and try again.',
+  'Search service is temporarily unavailable. Please try again later.',
+  'An unexpected error occurred. Please try again.',
+  'At least 2 properties required for comparison',
+  'Maximum 5 properties can be compared',
+  'Property not found',
+])
 
+function sanitizeErrorMessage(message: string): string {
+  // Only return the message if it's in our safe whitelist
+  if (SAFE_ERROR_MESSAGES.has(message)) {
+    return message
+  }
+  // For any other message, return a generic error to avoid leaking system details
+  return 'An unexpected error occurred. Please try again.'
+}
+
+function getErrorMessage(status: number, apiError?: ApiError): string {
+  // Use status code to determine the appropriate generic message
+  // Don't expose raw API error messages that might contain system details
   switch (status) {
     case 400:
+      // For 400 errors, only show safe validation messages
+      if (apiError?.message && SAFE_ERROR_MESSAGES.has(apiError.message)) {
+        return apiError.message
+      }
       return 'Invalid search query. Please try again with different terms.'
+    case 404:
+      return 'Property not found'
     case 429:
       return 'Too many requests. Please wait a moment and try again.'
     case 503:

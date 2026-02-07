@@ -212,6 +212,66 @@ class TestHybridSearch:
             assert result.properties == []
             assert result.match_type == "similar"
 
+    @pytest.mark.asyncio
+    async def test_partial_match_relax_both_bhk_and_area(self, mock_property, mock_embedding):
+        """Should relax both BHK and area (step 4) when individual relaxations fail."""
+        mock_db = AsyncMock()
+
+        parsed = ParsedQuery(
+            bhk=5,
+            area="UnknownArea",
+            max_price=100,
+            raw_query="5BHK in UnknownArea under 1Cr"
+        )
+
+        call_count = [0]
+
+        async def mock_search_side_effect(*args, **kwargs):
+            call_count[0] += 1
+            # First 3 calls return empty (exact, relax BHK, relax area)
+            if call_count[0] <= 3:
+                return []
+            # Fourth call (relax both BHK and area, keep price) - return result
+            return [mock_property]
+
+        with patch("app.core.search_engine._search_with_filters", new_callable=AsyncMock) as mock_search:
+            mock_search.side_effect = mock_search_side_effect
+
+            result = await hybrid_search(mock_db, parsed, "bangalore", 10)
+
+            assert result.match_type == "partial"
+            assert "bhk" in result.relaxed_filters
+            assert "area" in result.relaxed_filters
+
+    @pytest.mark.asyncio
+    async def test_partial_match_only_bhk_relaxed(self, mock_property, mock_embedding):
+        """Should only include bhk in relaxed when area was not specified."""
+        mock_db = AsyncMock()
+
+        parsed = ParsedQuery(
+            bhk=5,
+            area=None,  # No area specified
+            max_price=100,
+            raw_query="5BHK under 1Cr"
+        )
+
+        call_count = [0]
+
+        async def mock_search_side_effect(*args, **kwargs):
+            call_count[0] += 1
+            if call_count[0] <= 3:
+                return []
+            return [mock_property]
+
+        with patch("app.core.search_engine._search_with_filters", new_callable=AsyncMock) as mock_search:
+            mock_search.side_effect = mock_search_side_effect
+
+            result = await hybrid_search(mock_db, parsed, "bangalore", 10)
+
+            assert "bhk" in result.relaxed_filters
+            # Area should not be in relaxed since it wasn't specified
+            assert "area" not in result.relaxed_filters
+
 
 class TestSearchWithFilters:
     """Tests for _search_with_filters function."""
@@ -294,6 +354,151 @@ class TestSearchWithFilters:
             city="",
             limit=10,
             use_bhk=False  # Skip BHK
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_min_price_filter_applied(self):
+        """Should apply min_price filter."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(min_price=50, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10,
+            use_price=True
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_max_price_filter_applied(self):
+        """Should apply max_price filter."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(max_price=100, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10,
+            use_price=True
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_min_sqft_filter_applied(self):
+        """Should apply min_sqft filter."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(min_sqft=1000, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_max_sqft_filter_applied(self):
+        """Should apply max_sqft filter."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(max_sqft=2000, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_area_filter_with_sanitization(self):
+        """Should apply area filter with SQL wildcards sanitized."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        # Test with malicious input containing SQL wildcards
+        parsed = ParsedQuery(area="White%field_test", raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10,
+            use_area=True
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_combined_price_filters(self):
+        """Should apply both min_price and max_price together."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(min_price=50, max_price=100, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10,
+            use_price=True
+        )
+
+        mock_db.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_combined_sqft_filters(self):
+        """Should apply both min_sqft and max_sqft together."""
+        mock_db = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.all.return_value = []
+        mock_db.execute.return_value = mock_result
+
+        parsed = ParsedQuery(min_sqft=1000, max_sqft=2000, raw_query="test")
+
+        await _search_with_filters(
+            mock_db,
+            [0.1] * 768,
+            parsed,
+            city="bangalore",
+            limit=10
         )
 
         mock_db.execute.assert_called_once()

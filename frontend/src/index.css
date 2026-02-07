@@ -2,10 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Protect Leaflet elements from Tailwind Preflight resets */
+.leaflet-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  border-style: none;
+}
+
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  display: block;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode body */
+.dark body {
+  background-color: #111827;
+  color: #f3f4f6;
+}
+
+/* Swagger UI dark mode overrides */
+.dark .swagger-ui {
+  filter: invert(88%) hue-rotate(180deg);
+}
+.dark .swagger-ui .highlight-code {
+  filter: invert(100%) hue-rotate(180deg);
+}
+.dark .swagger-ui svg:not(.model-toggle) {
+  filter: invert(100%) hue-rotate(180deg);
 }
