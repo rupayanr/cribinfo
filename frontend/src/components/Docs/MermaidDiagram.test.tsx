@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 // Mock useTheme - must be at top level without variable references
 vi.mock('../../hooks/useTheme', () => ({
@@ -155,6 +156,160 @@ describe('MermaidDiagram', () => {
   it('should have overflow-hidden for zoomable container', () => {
     const { container } = render(<MermaidDiagram chart="graph TD; A-->B" />)
     const diagramContainer = container.querySelector('.overflow-hidden')
+    expect(diagramContainer).toBeInTheDocument()
+  })
+
+  it('should render zoom controls', async () => {
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByTitle('Zoom in')).toBeInTheDocument()
+      expect(screen.getByTitle('Zoom out')).toBeInTheDocument()
+      expect(screen.getByTitle('Reset zoom')).toBeInTheDocument()
+    })
+  })
+
+  it('should display 100% zoom by default', async () => {
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+  })
+
+  it('should show help text at default zoom', async () => {
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Ctrl\/Cmd \+ scroll to zoom/i)).toBeInTheDocument()
+    })
+  })
+
+  it('should handle zoom in button click', async () => {
+    const user = userEvent.setup()
+
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    const zoomInBtn = screen.getByTitle('Zoom in')
+    await user.click(zoomInBtn)
+
+    expect(screen.getByText('125%')).toBeInTheDocument()
+  })
+
+  it('should handle zoom out button click', async () => {
+    const user = userEvent.setup()
+
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    const zoomOutBtn = screen.getByTitle('Zoom out')
+    await user.click(zoomOutBtn)
+
+    expect(screen.getByText('75%')).toBeInTheDocument()
+  })
+
+  it('should handle reset button click', async () => {
+    const user = userEvent.setup()
+
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    // First zoom in
+    const zoomInBtn = screen.getByTitle('Zoom in')
+    await user.click(zoomInBtn)
+    expect(screen.getByText('125%')).toBeInTheDocument()
+
+    // Then reset
+    const resetBtn = screen.getByTitle('Reset zoom')
+    await user.click(resetBtn)
+    expect(screen.getByText('100%')).toBeInTheDocument()
+  })
+
+  it('should disable zoom out at minimum zoom', async () => {
+    const user = userEvent.setup()
+
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    const zoomOutBtn = screen.getByTitle('Zoom out')
+
+    // Zoom out to minimum (50%)
+    await user.click(zoomOutBtn) // 75%
+    await user.click(zoomOutBtn) // 50%
+
+    expect(screen.getByText('50%')).toBeInTheDocument()
+    expect(zoomOutBtn).toBeDisabled()
+  })
+
+  it('should disable zoom in at maximum zoom', async () => {
+    const user = userEvent.setup()
+
+    render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    const zoomInBtn = screen.getByTitle('Zoom in')
+
+    // Zoom in to maximum (300%)
+    for (let i = 0; i < 8; i++) {
+      await user.click(zoomInBtn)
+    }
+
+    expect(screen.getByText('300%')).toBeInTheDocument()
+    expect(zoomInBtn).toBeDisabled()
+  })
+
+  it('should reset zoom when chart changes', async () => {
+    const user = userEvent.setup()
+
+    const { rerender } = render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    // Zoom in
+    const zoomInBtn = screen.getByTitle('Zoom in')
+    await user.click(zoomInBtn)
+    expect(screen.getByText('125%')).toBeInTheDocument()
+
+    // Change chart
+    rerender(<MermaidDiagram chart="graph TD; C-->D" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+  })
+
+  it('should show cursor-grab when zoomed in', async () => {
+    const user = userEvent.setup()
+
+    const { container } = render(<MermaidDiagram chart="graph TD; A-->B" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('100%')).toBeInTheDocument()
+    })
+
+    // Zoom in
+    const zoomInBtn = screen.getByTitle('Zoom in')
+    await user.click(zoomInBtn)
+
+    const diagramContainer = container.querySelector('.cursor-grab')
     expect(diagramContainer).toBeInTheDocument()
   })
 })

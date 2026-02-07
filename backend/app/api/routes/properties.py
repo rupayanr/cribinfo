@@ -1,12 +1,15 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.models.database import get_db
 from app.repositories.property_repo import get_property_by_id, get_properties_by_ids
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 
 class PropertyResponse(BaseModel):
@@ -32,7 +35,9 @@ class CompareResponse(BaseModel):
 
 
 @router.get("/properties/{property_id}", response_model=PropertyResponse)
+@limiter.limit("60/minute")
 async def get_property(
+    request: Request,
     property_id: UUID,
     db: AsyncSession = Depends(get_db),
 ):
@@ -44,17 +49,19 @@ async def get_property(
 
 
 @router.post("/compare", response_model=CompareResponse)
+@limiter.limit("30/minute")
 async def compare_properties(
-    request: CompareRequest,
+    request: Request,
+    compare_request: CompareRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """Compare multiple properties side by side."""
-    if len(request.property_ids) < 2:
+    if len(compare_request.property_ids) < 2:
         raise HTTPException(status_code=400, detail="At least 2 properties required for comparison")
-    if len(request.property_ids) > 5:
+    if len(compare_request.property_ids) > 5:
         raise HTTPException(status_code=400, detail="Maximum 5 properties can be compared")
 
-    property_uuids = [UUID(pid) for pid in request.property_ids]
+    property_uuids = [UUID(pid) for pid in compare_request.property_ids]
     properties = await get_properties_by_ids(db, property_uuids)
 
     return CompareResponse(

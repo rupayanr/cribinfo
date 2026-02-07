@@ -3,7 +3,6 @@ import type {
   Property,
   ChatMessage,
   SearchResponse,
-  ParsedFilters,
   MessageRole,
   MessageContentType,
   City,

@@ -38,7 +38,7 @@ export function FilterBadges({ filters }: FilterBadgesProps) {
       {badges.map((badge, index) => (
         <span
           key={index}
-          className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium"
+          className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium"
         >
           {badge}
         </span>

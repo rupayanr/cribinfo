@@ -12,9 +12,11 @@ interface SearchState {
   compareList: Property[]
   messages: ChatMessage[]
   isTyping: boolean
+  citySelectorOpen: boolean
 
   setQuery: (query: string) => void
   setCity: (city: string) => void
+  setCitySelectorOpen: (open: boolean) => void
   setResults: (results: Property[], filters: ParsedFilters) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
@@ -47,9 +49,23 @@ export const useSearchStore = create<SearchState>((set) => ({
   compareList: [],
   messages: [],
   isTyping: false,
+  citySelectorOpen: false,
 
   setQuery: (query) => set({ query }),
-  setCity: (city) => set({ city }),
+  setCitySelectorOpen: (citySelectorOpen) => set({ citySelectorOpen }),
+  setCity: (city) =>
+    set((state) => {
+      if (state.city === city) return state
+      return {
+        city,
+        messages: [],
+        results: [],
+        parsedFilters: null,
+        compareList: [],
+        error: null,
+        query: '',
+      }
+    }),
   setResults: (results, parsedFilters) => set({ results, parsedFilters, error: null }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error, isLoading: false }),

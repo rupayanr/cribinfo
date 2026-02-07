@@ -1,6 +1,6 @@
 """Tests for query parser module."""
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, AsyncMock
 
 from app.core.query_parser import (
     extract_json,
@@ -9,6 +9,7 @@ from app.core.query_parser import (
     ParsedQuery,
     AREA_CITY_MAP,
 )
+from app.core.exceptions import LLMError
 
 
 class TestExtractJson:
@@ -55,6 +56,19 @@ class TestExtractJson:
         text = '{"amenities": ["gym", "pool", "parking"]}'
         result = extract_json(text)
         assert result == {"amenities": ["gym", "pool", "parking"]}
+
+    def test_extract_json_malformed_in_regex_match(self):
+        """Should fallback when regex finds braces but JSON is invalid."""
+        # This triggers line 133-134: regex finds {}, but json.loads fails
+        text = 'Some text {not: valid: json: here} more text'
+        result = extract_json(text)
+        assert result == {}
+
+    def test_extract_json_nested_braces_invalid(self):
+        """Should handle text with braces but invalid JSON structure."""
+        text = 'Response: {bhk: 2, area: Whitefield}'  # Missing quotes
+        result = extract_json(text)
+        assert result == {}
 
 
 class TestInferCityFromArea:
@@ -189,6 +203,46 @@ class TestParseQuery:
         mock_ollama.assert_called_once()
         call_args = mock_ollama.call_args
         assert call_args[1]["options"]["temperature"] == 0
+
+    @pytest.mark.asyncio
+    async def test_parse_empty_query(self):
+        """Should return empty ParsedQuery for empty input."""
+        result = await parse_query("")
+        assert result.raw_query == ""
+        assert result.bhk is None
+
+    @pytest.mark.asyncio
+    async def test_parse_whitespace_query(self):
+        """Should return empty ParsedQuery for whitespace-only input."""
+        result = await parse_query("   ")
+        assert result.raw_query == ""
+
+    @pytest.mark.asyncio
+    async def test_parse_query_llm_error_reraise(self):
+        """Should re-raise LLMError from provider."""
+        with patch("app.core.query_parser.get_llm_provider") as mock_get_provider:
+            mock_provider = MagicMock()
+            mock_provider.chat = AsyncMock(side_effect=LLMError("Service unavailable"))
+            mock_get_provider.return_value = mock_provider
+
+            with pytest.raises(LLMError) as exc_info:
+                await parse_query("test query")
+
+            assert "Service unavailable" in str(exc_info.value)
+
+    @pytest.mark.asyncio
+    async def test_parse_query_unexpected_error_fallback(self):
+        """Should fall back to basic query on unexpected errors."""
+        with patch("app.core.query_parser.get_llm_provider") as mock_get_provider:
+            mock_provider = MagicMock()
+            mock_provider.chat = AsyncMock(side_effect=RuntimeError("Unexpected error"))
+            mock_get_provider.return_value = mock_provider
+
+            # Should not raise, but return fallback
+            result = await parse_query("test query")
+
+            assert result.raw_query == "test query"
+            assert result.bhk is None
 
 
 class TestAreaCityMap:

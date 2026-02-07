@@ -1,16 +1,76 @@
 title,area,bhk,sqft,bathrooms,price_lakhs,amenities,latitude,longitude
-Luxury Apartment,Greater Kailash,3,1900,3,380,gym|swimming pool|parking|security|modular kitchen,28.5494,77.2429
-Modern Flat,Dwarka,2,1150,2,95,gym|parking|power backup|metro connectivity,28.5921,77.0460
-Premium Penthouse,Vasant Vihar,4,3500,5,850,gym|swimming pool|concierge|parking|terrace|garden,28.5574,77.1545
-Budget Apartment,Noida Sector 62,2,900,2,58,parking|security|power backup,28.6273,77.3649
-Spacious Family Home,Saket,3,2000,3,320,gym|clubhouse|parking|garden|security,28.5244,77.2066
-Cozy Studio,Hauz Khas,1,550,1,85,parking|security|cafes nearby,28.5494,77.2001
-New Launch Tower,Gurgaon Sector 56,3,1600,3,175,gym|swimming pool|parking|children play area,28.4234,77.0833
-Heritage Apartment,Defence Colony,3,1800,3,420,gym|parking|security|park facing,28.5743,77.2336
-Tech Park Adjacent,Noida Sector 18,2,1050,2,78,gym|parking|power backup|metro,28.5706,77.3273
-Gated Community Villa,DLF Phase 5,5,4200,6,680,swimming pool|gym|tennis court|clubhouse|garden,28.4493,77.0967
-Affordable Housing,Rohini,2,850,2,52,parking|security,28.7495,77.0568
-Executive Apartment,Connaught Place,2,1100,2,290,gym|parking|concierge|security,28.6315,77.2167
-Green Living Complex,Indirapuram,3,1400,2,92,gym|parking|garden|rainwater harvesting,28.6410,77.3777
-Student Housing,North Campus,1,480,1,45,security|wifi|laundry,28.6862,77.2092
-Senior Living,South Extension,2,1200,2,185,gym|medical facility|garden|security|elevator,28.5715,77.2190
+Vastu-Compliant Flat in Lajpat Nagar,Lajpat Nagar,2,1143,2,85,parking|security|lift|gym|clubhouse|fire safety|cctv|intercom|tennis court|indoor games|party hall|ev charging,28.563241,77.253939
+Stylish Villa in Pitampura,Pitampura,3,1746,3,185,parking|security|power backup|lift|garden|fire safety|cctv|solar panels|gated community,28.707864,77.125673
+Furnished Studio Near Metro,Noida Sector 137,1,454,2,25.4,parking|security|power backup|gym|garden|children play area|rainwater harvesting|indoor games|vastu compliant,28.550241,77.416985
+Well-Maintained Villa in Noida Sector 137,Noida Sector 137,3,1588,4,85,parking|security|garden|clubhouse|children play area|fire safety|intercom|pet friendly|gated community,28.530931,77.424753
+Updated Greater Kailash Near Metro,Greater Kailash,5,4271,5,720,parking|security|power backup|lift|gym|swimming pool|garden|rainwater harvesting|fire safety|cctv|jogging track|meditation room|party hall|concierge|vastu compliant,28.553841,77.232357
+Newly Renovated Builder Floor in Noida Sector 137,Noida Sector 137,2,1030,3,50,parking|security|gym|intercom|gated community,28.539943,77.394184
+Stylish Apartment in Hauz Khas,Hauz Khas,2,805,3,110,parking|security|power backup|lift|swimming pool|garden|rainwater harvesting|fire safety|cctv|intercom|indoor games|party hall|ev charging|solar panels|gated community,28.5581,77.198641
+Vastu-Compliant Duplex in Mayur Vihar,Mayur Vihar,4,2109,5,165,parking|security|power backup|lift|gym|swimming pool|intercom|visitor parking|indoor games|concierge|pet friendly|gated community,28.604668,77.301009
+Modern Apartment in Dwarka,Dwarka,2,1071,3,65,parking|security|power backup|swimming pool|intercom|visitor parking|jogging track|vastu compliant,28.574513,77.031503
+Cozy Studio in Lajpat Nagar,Lajpat Nagar,1,579,1,55,parking|security|power backup|lift|garden|children play area|fire safety|intercom|indoor games|meditation room|party hall|solar panels,28.579986,77.238277
+Ultra-Modern Builder Floor in Greater Kailash,Greater Kailash,2,932,3,105,parking|power backup|lift|gym|swimming pool|garden|rainwater harvesting|fire safety|cctv|intercom|visitor parking|indoor games|concierge|ev charging|pet friendly|gated community|vastu compliant,28.565253,77.233664
+Corner Noida Sector 137 with Parking,Noida Sector 137,2,1172,2,65,parking|lift|cctv|jogging track|concierge,28.560582,77.408065
+Smart Home Apartment in Greater Kailash,Greater Kailash,2,898,2,140,parking|security|power backup|lift|gym|rainwater harvesting|fire safety|intercom|visitor parking|pet friendly|gated community,28.540127,77.239362
+Smart Home Studio in Pitampura,Pitampura,1,425,2,42.2,parking|security|lift|swimming pool|children play area|rainwater harvesting|fire safety|jogging track|ev charging|pet friendly|gated community,28.70189,77.15444
+Modern Flat in Vasant Kunj,Vasant Kunj,1,592,1,36.0,parking|security|power backup|lift|fire safety|indoor games|gated community|vastu compliant,28.515023,77.16501
+Exquisite Saket in Prime Location,Saket,3,1675,3,200,parking|security|power backup|gym|swimming pool|clubhouse|rainwater harvesting|fire safety|cctv|jogging track|meditation room|ev charging|gated community|vastu compliant,28.536753,77.210434
+Smart Home Studio in Mayur Vihar,Mayur Vihar,1,611,1,47.7,parking|security|power backup|gym|children play area|intercom|visitor parking|tennis court|indoor games,28.594098,77.306464
+Premium Saket with City View,Saket,2,1102,3,185,parking|security|power backup|lift|gym|children play area|fire safety|intercom|visitor parking|tennis court|gated community,28.519341,77.22202
+Stylish Studio in Lajpat Nagar,Lajpat Nagar,1,556,1,50,parking|security|power backup|lift|intercom|tennis court|pet friendly,28.555981,77.237656
+Corner Janakpuri with Parking,Janakpuri,3,1575,3,145,parking|security|power backup|lift|gym|fire safety|visitor parking|meditation room,28.632707,77.103849
+Vastu-Compliant Penthouse in Greater Noida,Greater Noida,4,1934,4,130,parking|security|lift|swimming pool|garden|fire safety|intercom|ev charging,28.480013,77.514336
+Smart Home Builder Floor in Pitampura,Pitampura,2,1156,3,95,parking|security|power backup|gym|garden|children play area|rainwater harvesting|intercom|jogging track|ev charging|vastu compliant,28.687332,77.132503
+Stylish Apartment in Janakpuri,Janakpuri,2,1029,2,90,parking|security|lift|garden|fire safety|cctv|gated community,28.618355,77.100084
+Updated Vasant Kunj Near Metro,Vasant Kunj,2,967,2,85,parking|security|power backup|lift|gym|swimming pool|fire safety|cctv|jogging track|ev charging,28.537751,77.166544
+Smart Home Builder Floor in Hauz Khas,Hauz Khas,2,1172,3,185,parking|security|power backup|lift|gym|garden|clubhouse|fire safety|cctv|intercom|visitor parking|jogging track|party hall|gated community,28.548083,77.177849
+Compact Studio in Rohini,Rohini,1,553,2,36.5,parking|security|power backup|swimming pool|fire safety|cctv|intercom|visitor parking|concierge|pet friendly,28.7466,77.070951
+Updated Rohini Near Metro,Rohini,2,949,2,80,parking|security|power backup|lift|gym|children play area|cctv|jogging track|ev charging|gated community,28.764492,77.042283
+Exquisite Greater Kailash in Prime Location,Greater Kailash,1,645,2,80,parking|security|power backup|lift|swimming pool|clubhouse|rainwater harvesting|cctv|intercom|visitor parking|jogging track|tennis court|party hall|solar panels|pet friendly,28.533769,77.240039
+Stylish Flat in Hauz Khas,Hauz Khas,3,1326,3,195,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|fire safety|cctv|intercom|party hall|ev charging,28.547226,77.211395
+Modern Builder Floor in Janakpuri,Janakpuri,2,994,3,70,parking|security|lift|gym|swimming pool|rainwater harvesting|fire safety|cctv|intercom|solar panels,28.621599,77.073572
+Updated Pitampura Near Metro,Pitampura,2,1146,2,75,parking|security|lift|swimming pool|garden|clubhouse|children play area|fire safety|cctv|intercom,28.690485,77.138716
+Corner Dwarka with Parking,Dwarka,2,815,2,80,parking|security|power backup|lift|swimming pool|garden|fire safety|cctv|intercom|visitor parking|concierge|gated community,28.575379,77.034356
+Updated Hauz Khas Near Metro,Hauz Khas,3,1510,3,210,parking|security|power backup|lift|gym|children play area|fire safety|cctv|intercom|party hall|concierge|gated community,28.546811,77.212628
+Contemporary Greater Kailash with Amenities,Greater Kailash,2,1138,2,135,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|children play area|fire safety|intercom|ev charging|gated community,28.542176,77.250916
+Modern Builder Floor in Pitampura,Pitampura,2,1233,2,125,parking|security|power backup|gym|swimming pool|clubhouse|rainwater harvesting|fire safety|cctv|jogging track,28.711427,77.152171
+Premium Saket with City View,Saket,3,1876,4,220,parking|security|power backup|lift|garden|clubhouse|children play area|rainwater harvesting|fire safety|cctv|visitor parking|party hall|ev charging|pet friendly|gated community|vastu compliant,28.525408,77.218856
+Corner Pitampura with Parking,Pitampura,2,1263,2,90,parking|security|power backup|lift|garden|rainwater harvesting|cctv|intercom|visitor parking|vastu compliant,28.694661,77.125488
+Contemporary Janakpuri with Amenities,Janakpuri,4,2996,5,300,parking|security|power backup|lift|gym|swimming pool|garden|children play area|fire safety|cctv|intercom|visitor parking|jogging track|meditation room|gated community,28.6238,77.080927
+Stylish Villa in Janakpuri,Janakpuri,5,3299,5,330,parking|security|power backup|gym|swimming pool|clubhouse|children play area|cctv|tennis court,28.616561,77.09148
+Updated Mayur Vihar Near Metro,Mayur Vihar,4,2469,5,230,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|rainwater harvesting|fire safety|cctv|jogging track|ev charging|gated community|vastu compliant,28.597537,77.307164
+Bright & Airy Bungalow in Greater Noida,Greater Noida,4,2968,4,110,parking|security|power backup|lift|gym|garden|children play area|cctv|visitor parking|tennis court,28.47015,77.501525
+Luxury Flat in Saket,Saket,2,1221,3,190,parking|security|power backup|lift|swimming pool|garden|clubhouse|fire safety|cctv|concierge|solar panels|gated community|vastu compliant,28.526864,77.212409
+Well-Maintained Farmhouse in Pitampura,Pitampura,5,4319,5,460,parking|security|power backup|lift|garden|clubhouse|rainwater harvesting|fire safety|cctv|intercom|vastu compliant,28.688,77.126438
+Designer Builder Floor in Greater Kailash,Greater Kailash,2,1040,3,115,parking|security|power backup|lift|gym|garden|children play area|fire safety|cctv|intercom|visitor parking|solar panels|gated community,28.53478,77.227826
+Spacious Family Flat in Pitampura,Pitampura,2,862,3,65,parking|security|power backup|lift|gym|children play area|fire safety|cctv|party hall,28.695277,77.129734
+Ultra-Modern Villa in Defence Colony,Defence Colony,3,1291,3,220,parking|security|power backup|lift|gym|swimming pool|garden|rainwater harvesting|fire safety|cctv|intercom|gated community|vastu compliant,28.591055,77.237458
+Well-Maintained Flat in Mayur Vihar,Mayur Vihar,3,1358,4,115,parking|security|power backup|lift|swimming pool|children play area|rainwater harvesting|fire safety|cctv|intercom|gated community,28.621357,77.277213
+Bright & Airy Apartment in Mayur Vihar,Mayur Vihar,2,952,3,85,parking|security|power backup|lift|garden|clubhouse|cctv|intercom|visitor parking|jogging track|vastu compliant,28.59549,77.276082
+Smart Home Flat in Greater Kailash,Greater Kailash,1,496,1,55,parking|security|power backup|lift|swimming pool|garden|rainwater harvesting|fire safety|cctv|ev charging|solar panels,28.551357,77.22646
+Corner Lajpat Nagar with Parking,Lajpat Nagar,2,1062,3,75,parking|security|power backup|lift|gym|clubhouse|fire safety|cctv|intercom,28.575496,77.237464
+Spacious Family Builder Floor in Noida Sector 137,Noida Sector 137,2,882,2,40.7,power backup|lift|swimming pool|rainwater harvesting|fire safety|cctv|meditation room|party hall|gated community,28.538321,77.39773
+Corner Noida Sector 62 with Parking,Noida Sector 62,3,1818,3,170,parking|security|power backup|gym|swimming pool|fire safety|cctv|indoor games|ev charging|gated community,28.615522,77.37084
+Contemporary Noida Sector 62 with Amenities,Noida Sector 62,2,887,2,65,parking|security|power backup|lift|clubhouse|intercom|concierge|gated community,28.608765,77.364443
+Smart Home Villa in Pitampura,Pitampura,3,1732,4,140,parking|security|power backup|lift|gym|swimming pool|rainwater harvesting|fire safety|cctv|solar panels|gated community,28.693784,77.139521
+Stylish Flat in Janakpuri,Janakpuri,2,1187,2,75,parking|security|power backup|gym|rainwater harvesting|fire safety|cctv|indoor games,28.614136,77.098063
+Contemporary Pitampura with Amenities,Pitampura,3,1343,4,115,parking|security|power backup|lift|gym|swimming pool|children play area|rainwater harvesting|cctv|intercom|visitor parking,28.703551,77.137576
+Spacious Family Villa in Noida Sector 62,Noida Sector 62,5,4967,5,460,parking|security|power backup|lift|swimming pool|clubhouse|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|tennis court|indoor games|pet friendly|vastu compliant,28.62173,77.362333
+Newly Renovated Apartment in Greater Noida,Greater Noida,3,1545,4,80,parking|security|lift|cctv|intercom,28.463316,77.508278
+Exquisite Greater Kailash in Prime Location,Greater Kailash,3,1783,3,280,parking|security|power backup|lift|swimming pool|garden|fire safety|cctv|intercom|visitor parking|indoor games|meditation room|party hall|solar panels|gated community|vastu compliant,28.53694,77.250294
+Premium Greater Kailash with City View,Greater Kailash,3,1829,4,200,parking|security|power backup|lift|swimming pool|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|indoor games|party hall|concierge|pet friendly|gated community,28.542359,77.230639
+Furnished Studio Near Metro,Pitampura,1,656,1,65,parking|security|power backup|lift|clubhouse|intercom|visitor parking|gated community,28.690514,77.126114
+Smart Home Apartment in Rohini,Rohini,3,1642,3,145,security|power backup|lift|gym|garden|clubhouse|rainwater harvesting|fire safety|cctv|intercom|tennis court,28.763647,77.067489
+Spacious Family Flat in Vasant Kunj,Vasant Kunj,2,980,3,100,parking|security|power backup|lift|gym|children play area|rainwater harvesting|fire safety|intercom|visitor parking|gated community|vastu compliant,28.52249,77.155384
+Vastu-Compliant Apartment in Pitampura,Pitampura,3,1956,3,125,parking|security|power backup|lift|gym|clubhouse|fire safety|cctv|intercom|party hall,28.717931,77.129174
+Luxury Builder Floor in Defence Colony,Defence Colony,2,1072,3,130,parking|security|power backup|lift|swimming pool|rainwater harvesting|fire safety|cctv|intercom|visitor parking|tennis court,28.578309,77.240617
+Designer Villa in Gurgaon Sector 56,Gurgaon Sector 56,3,1327,3,240,parking|security|power backup|lift|swimming pool|clubhouse|rainwater harvesting|fire safety|cctv|intercom|gated community|vastu compliant,28.429564,77.035174
+Contemporary Mayur Vihar with Amenities,Mayur Vihar,1,434,1,44.9,parking|security|power backup|lift|swimming pool|garden|clubhouse|children play area|fire safety|intercom|pet friendly|gated community,28.614065,77.282835
+Furnished Studio Near Metro,Saket,1,643,2,95,parking|security|lift|gym|swimming pool|garden|children play area|rainwater harvesting|fire safety|cctv|intercom|jogging track|ev charging|gated community|vastu compliant,28.531433,77.231572
+Premium Greater Kailash with City View,Greater Kailash,2,901,2,110,parking|security|power backup|lift|gym|swimming pool|garden|clubhouse|children play area|fire safety|cctv|visitor parking|jogging track|party hall|vastu compliant,28.550573,77.241004
+Updated Defence Colony Near Metro,Defence Colony,2,1300,2,230,parking|security|power backup|lift|gym|swimming pool|clubhouse|children play area|fire safety|cctv|indoor games|pet friendly,28.565652,77.22753
+Exquisite Gurgaon Sector 56 in Prime Location,Gurgaon Sector 56,4,3130,4,350,parking|security|power backup|lift|gym|swimming pool|garden|children play area|rainwater harvesting|fire safety|cctv|intercom|visitor parking|jogging track|indoor games|pet friendly|gated community|vastu compliant,28.418995,77.049364
+Updated Vasant Kunj Near Metro,Vasant Kunj,3,1483,3,95,parking|security|power backup|lift|gym|swimming pool|children play area|tennis court|indoor games|gated community,28.51016,77.164578
+Contemporary Noida Sector 62 with Amenities,Noida Sector 62,2,1100,3,105,parking|security|power backup|lift|garden|fire safety|cctv|visitor parking|gated community,28.627157,77.37048
+Luxury Duplex in Gurgaon Sector 56,Gurgaon Sector 56,4,2600,5,290,parking|security|power backup|lift|gym|swimming pool|clubhouse|children play area|fire safety|cctv|intercom|visitor parking|jogging track|indoor games|meditation room|concierge|ev charging|pet friendly|vastu compliant,28.427714,77.048516
+Modern Studio with Amenities,Greater Noida,1,505,1,34.0,parking|lift|garden|rainwater harvesting|concierge|ev charging,28.46536,77.518413

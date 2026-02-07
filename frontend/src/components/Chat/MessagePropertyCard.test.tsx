@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MessagePropertyCard } from './MessagePropertyCard'
@@ -115,5 +115,122 @@ describe('MessagePropertyCard', () => {
 
     render(<MessagePropertyCard property={mockProperty} />)
     expect(screen.getByText(/Added/i)).toBeInTheDocument()
+  })
+
+  it('should show "+N more" button when more than 3 amenities', () => {
+    const propertyWithManyAmenities = {
+      ...mockProperty,
+      amenities: ['gym', 'parking', 'swimming pool', 'garden', 'clubhouse'],
+    }
+    render(<MessagePropertyCard property={propertyWithManyAmenities} />)
+    expect(screen.getByText(/\+2 more/i)).toBeInTheDocument()
+  })
+
+  it('should show all amenities when "+N more" is clicked', async () => {
+    const user = userEvent.setup()
+    const propertyWithManyAmenities = {
+      ...mockProperty,
+      amenities: ['gym', 'parking', 'swimming pool', 'garden', 'clubhouse'],
+    }
+    render(<MessagePropertyCard property={propertyWithManyAmenities} />)
+
+    const moreButton = screen.getByText(/\+2 more/i)
+    await user.click(moreButton)
+
+    // Now all amenities should be visible
+    expect(screen.getByText('gym')).toBeInTheDocument()
+    expect(screen.getByText('parking')).toBeInTheDocument()
+    expect(screen.getByText('swimming pool')).toBeInTheDocument()
+    expect(screen.getByText('garden')).toBeInTheDocument()
+    expect(screen.getByText('clubhouse')).toBeInTheDocument()
+    expect(screen.getByText(/Show less/i)).toBeInTheDocument()
+  })
+
+  it('should collapse amenities when "Show less" is clicked', async () => {
+    const user = userEvent.setup()
+    const propertyWithManyAmenities = {
+      ...mockProperty,
+      amenities: ['gym', 'parking', 'swimming pool', 'garden', 'clubhouse'],
+    }
+    render(<MessagePropertyCard property={propertyWithManyAmenities} />)
+
+    // Expand
+    await user.click(screen.getByText(/\+2 more/i))
+    expect(screen.getByText('garden')).toBeInTheDocument()
+
+    // Collapse
+    await user.click(screen.getByText(/Show less/i))
+    expect(screen.queryByText('garden')).not.toBeInTheDocument()
+    expect(screen.getByText(/\+2 more/i)).toBeInTheDocument()
+  })
+
+  it('should disable compare button when list is full', () => {
+    // Add 5 properties to fill the compare list
+    for (let i = 0; i < 5; i++) {
+      useSearchStore.getState().addToCompare({
+        ...mockProperty,
+        id: `prop-${i}`,
+      })
+    }
+
+    const newProperty = { ...mockProperty, id: 'new-prop' }
+    render(<MessagePropertyCard property={newProperty} />)
+
+    const button = screen.getByRole('button', { name: /Compare/i })
+    expect(button).toBeDisabled()
+  })
+
+  it('should not disable compare button for property already in list when list is full', () => {
+    // Add 5 properties including our test property
+    useSearchStore.getState().addToCompare(mockProperty)
+    for (let i = 0; i < 4; i++) {
+      useSearchStore.getState().addToCompare({
+        ...mockProperty,
+        id: `prop-${i}`,
+      })
+    }
+
+    render(<MessagePropertyCard property={mockProperty} />)
+
+    const button = screen.getByRole('button', { name: /Added/i })
+    expect(button).not.toBeDisabled()
+  })
+
+  it('should not render BHK section when bhk is null', () => {
+    const propertyWithoutBhk = { ...mockProperty, bhk: null, title: 'Test Property' }
+    render(<MessagePropertyCard property={propertyWithoutBhk} />)
+    // The BHK badge in the stats section should not be present
+    const statsSection = document.querySelector('.border-y')
+    expect(statsSection?.textContent).not.toContain('BHK')
+  })
+
+  it('should not render sqft section when sqft is null', () => {
+    const propertyWithoutSqft = { ...mockProperty, sqft: null }
+    render(<MessagePropertyCard property={propertyWithoutSqft} />)
+    expect(screen.queryByText(/sqft/i)).not.toBeInTheDocument()
+  })
+
+  it('should not render bathrooms section when bathrooms is null', () => {
+    const propertyWithoutBath = { ...mockProperty, bathrooms: null }
+    render(<MessagePropertyCard property={propertyWithoutBath} />)
+    expect(screen.queryByText(/Bath/i)).not.toBeInTheDocument()
+  })
+
+  it('should not render amenities section when amenities is empty', () => {
+    const propertyWithoutAmenities = { ...mockProperty, amenities: [] }
+    render(<MessagePropertyCard property={propertyWithoutAmenities} />)
+    expect(screen.queryByText('gym')).not.toBeInTheDocument()
+  })
+
+  it('should remove from compare when already added', async () => {
+    const user = userEvent.setup()
+    useSearchStore.getState().addToCompare(mockProperty)
+
+    render(<MessagePropertyCard property={mockProperty} />)
+
+    const button = screen.getByRole('button', { name: /Added/i })
+    await user.click(button)
+
+    expect(useSearchStore.getState().compareList).not.toContainEqual(mockProperty)
   })
 })

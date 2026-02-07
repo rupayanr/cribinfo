@@ -75,8 +75,68 @@ describe('searchStore', () => {
     })
 
     it('should accept empty string for all cities', () => {
+      useSearchStore.getState().setCity('bangalore')
       useSearchStore.getState().setCity('')
       expect(useSearchStore.getState().city).toBe('')
+    })
+
+    it('should clear messages when city changes', () => {
+      useSearchStore.getState().setCity('bangalore')
+      useSearchStore.getState().addUserMessage('2BHK under 1Cr')
+      useSearchStore.getState().addAssistantMessage('properties', 'Found 1 property', [mockProperty], mockFilters)
+
+      useSearchStore.getState().setCity('mumbai')
+
+      const state = useSearchStore.getState()
+      expect(state.city).toBe('mumbai')
+      expect(state.messages).toHaveLength(0)
+    })
+
+    it('should clear results and parsedFilters when city changes', () => {
+      useSearchStore.getState().setCity('bangalore')
+      useSearchStore.getState().setResults([mockProperty], mockFilters)
+
+      useSearchStore.getState().setCity('delhi')
+
+      const state = useSearchStore.getState()
+      expect(state.results).toHaveLength(0)
+      expect(state.parsedFilters).toBeNull()
+    })
+
+    it('should clear compareList when city changes', () => {
+      useSearchStore.getState().setCity('bangalore')
+      useSearchStore.getState().addToCompare(mockProperty)
+      useSearchStore.getState().addToCompare({ ...mockProperty, id: 'test-2' })
+
+      useSearchStore.getState().setCity('mumbai')
+
+      expect(useSearchStore.getState().compareList).toHaveLength(0)
+    })
+
+    it('should clear error and query when city changes', () => {
+      useSearchStore.getState().setCity('bangalore')
+      useSearchStore.getState().setQuery('2BHK with gym')
+      useSearchStore.getState().setError('Something went wrong')
+
+      useSearchStore.getState().setCity('delhi')
+
+      const state = useSearchStore.getState()
+      expect(state.query).toBe('')
+      expect(state.error).toBeNull()
+    })
+
+    it('should not clear state when setting the same city', () => {
+      useSearchStore.getState().setCity('bangalore')
+      useSearchStore.getState().addUserMessage('2BHK under 1Cr')
+      useSearchStore.getState().setResults([mockProperty], mockFilters)
+      useSearchStore.getState().addToCompare(mockProperty)
+
+      useSearchStore.getState().setCity('bangalore')
+
+      const state = useSearchStore.getState()
+      expect(state.messages).toHaveLength(1)
+      expect(state.results).toHaveLength(1)
+      expect(state.compareList).toHaveLength(1)
     })
   })
 

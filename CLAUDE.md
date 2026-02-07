@@ -68,9 +68,14 @@ cribinfo/
     ├── Dockerfile
     ├── scripts/
     │   ├── load_data.py
+    │   ├── generate_data.py       # NEW: Generate realistic data
     │   └── generate_embeddings.py
     ├── data/
-    │   └── bangalore/
+    │   ├── bangalore/
+    │   │   └── housing.csv
+    │   ├── mumbai/
+    │   │   └── housing.csv
+    │   └── delhi/
     │       └── housing.csv
     └── app/
         ├── main.py
@@ -209,16 +214,38 @@ uvicorn app.main:app --reload
 ### Backend (.env)
 ```
 DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/cribinfo
+
+# Environment (affects CORS, credentials)
+ENVIRONMENT=development  # "development" or "production"
+
+# Provider selection
+LLM_PROVIDER=ollama      # "ollama" or "groq"
+EMBEDDING_PROVIDER=ollama # "ollama" or "jina" or "none"
+
+# Ollama settings (local development)
 OLLAMA_HOST=http://localhost:11434
 OLLAMA_EMBED_MODEL=nomic-embed-text
 OLLAMA_LLM_MODEL=llama3.2
+
+# Production providers
+GROQ_API_KEY=gsk-...
+JINA_API_KEY=jina_...
+
+# CORS (auto-switches in production)
 CORS_ORIGINS=["http://localhost:5173"]
+CORS_ORIGINS_PRODUCTION=["https://cribinfo.rupayan.dev"]
+
 DEFAULT_CITY=bangalore
 ```
 
 ### Frontend (.env)
 ```
 VITE_API_URL=http://localhost:8000
+```
+
+### Frontend (.env.production)
+```
+VITE_API_URL=https://api.cribinfo.rupayan.dev
 ```
 
 ---
@@ -233,19 +260,52 @@ VITE_API_URL=http://localhost:8000
 
 ## Data Sources
 
-| City | Source |
-|------|--------|
-| Bangalore | Kaggle Bangalore House Price Dataset |
-| Mumbai | (future) |
-| Delhi | (future) |
+| City | Properties | Source |
+|------|------------|--------|
+| Bangalore | 75 | Generated via `generate_data.py` |
+| Mumbai | 75 | Generated via `generate_data.py` |
+| Delhi | 75 | Generated via `generate_data.py` |
+
+---
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `load_data.py` | Load CSV data into database |
+| `generate_data.py` | Generate realistic property data |
+| `generate_embeddings.py` | Generate vector embeddings |
+
+### Generate Data
+```bash
+# Generate 75 properties per city (all cities)
+python scripts/generate_data.py --all --count 75
+
+# Generate for single city
+python scripts/generate_data.py --city bangalore --count 100
+```
+
+---
+
+## Security Features
+
+| Feature | Implementation |
+|---------|----------------|
+| **CSP** | No `unsafe-eval`, inline scripts only |
+| **HSTS** | 1 year max-age with preload |
+| **Rate Limiting** | 30/min (search), 60/min (other) |
+| **CORS** | Restricted to production domain |
+| **Error Sanitization** | No raw errors exposed to users |
+| **Security Headers** | X-Frame-Options, X-XSS-Protection, etc. |
 
 ---
 
 ## Milestones
 
-- [ ] Week 10: Data loading, embeddings, RAG search
-- [ ] Week 11: UI, map view, compare feature, deploy
+- [x] Week 10: Data loading, embeddings, RAG search
+- [x] Week 11: UI, map view, compare feature, deploy
+- [x] Security: CSP, HSTS, rate limiting, CORS hardening
 
 ---
 
-*Last updated: January 2025*
+*Last updated: February 2026*
