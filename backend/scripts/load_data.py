@@ -11,7 +11,7 @@ from uuid import uuid4
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sqlalchemy import text
+from sqlalchemy import text, delete
 from app.models.database import engine, async_session
 from app.models.property import Base, Property
 
@@ -24,12 +24,20 @@ async def init_db():
 
 
 async def load_csv(city: str, csv_path: Path):
-    """Load properties from CSV file."""
+    """Load properties from CSV file (idempotent - clears existing data first)."""
     if not csv_path.exists():
         print(f"Error: CSV file not found at {csv_path}")
         return
 
     async with async_session() as db:
+        # Clear existing properties for this city to ensure idempotent loading
+        stmt = delete(Property).where(Property.city == city)
+        result = await db.execute(stmt)
+        deleted_count = result.rowcount
+        await db.commit()
+        if deleted_count > 0:
+            print(f"Cleared {deleted_count} existing properties for {city}")
+
         with open(csv_path, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             count = 0
@@ -63,17 +71,29 @@ async def load_csv(city: str, csv_path: Path):
 
 async def main():
     parser = argparse.ArgumentParser(description="Load property data into database")
-    parser.add_argument("--city", required=True, help="City name (e.g., bangalore)")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--city", help="City name (e.g., bangalore)")
+    group.add_argument("--all", action="store_true", help="Load data for all cities")
     parser.add_argument("--csv", help="Path to CSV file (default: data/{city}/housing.csv)")
     args = parser.parse_args()
 
-    csv_path = Path(args.csv) if args.csv else Path(__file__).parent.parent / "data" / args.city / "housing.csv"
-
-    print(f"Initializing database...")
+    print("Initializing database...")
     await init_db()
 
-    print(f"Loading data for {args.city} from {csv_path}...")
-    await load_csv(args.city, csv_path)
+    if args.all:
+        # Load all cities
+        data_dir = Path(__file__).parent.parent / "data"
+        cities = [d.name for d in data_dir.iterdir() if d.is_dir() and (d / "housing.csv").exists()]
+        print(f"Found cities: {cities}")
+        for city in cities:
+            csv_path = data_dir / city / "housing.csv"
+            print(f"\nLoading data for {city} from {csv_path}...")
+            await load_csv(city, csv_path)
+        print(f"\nCompleted loading data for all {len(cities)} cities")
+    else:
+        csv_path = Path(args.csv) if args.csv else Path(__file__).parent.parent / "data" / args.city / "housing.csv"
+        print(f"Loading data for {args.city} from {csv_path}...")
+        await load_csv(args.city, csv_path)
 
 
 if __name__ == "__main__":

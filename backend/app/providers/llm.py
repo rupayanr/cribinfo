@@ -64,6 +64,8 @@ class GroqProvider(LLMProvider):
         self.model = settings.groq_model
 
     async def chat(self, system_prompt: str, user_message: str) -> str:
+        from groq import AuthenticationError, RateLimitError
+
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -75,9 +77,15 @@ class GroqProvider(LLMProvider):
                 max_tokens=500,
             )
             return response.choices[0].message.content
+        except AuthenticationError:
+            logger.error("Groq authentication failed - check API key")
+            raise LLMError("LLM service authentication failed")
+        except RateLimitError:
+            logger.warning("Groq rate limit exceeded")
+            raise LLMError("LLM service rate limited, please retry")
         except Exception as e:
-            logger.error(f"Groq LLM error: {e}")
-            raise LLMError(f"Query parsing service unavailable: {str(e)}")
+            logger.error(f"Groq unexpected error: {type(e).__name__}: {e}")
+            raise LLMError("Query parsing service temporarily unavailable")
 
 
 _provider: LLMProvider | None = None

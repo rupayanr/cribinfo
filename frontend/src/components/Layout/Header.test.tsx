@@ -74,7 +74,6 @@ describe('Header', () => {
     const menuButton = screen.getByTitle('Menu')
     await user.click(menuButton)
 
-    expect(screen.getByText('Architecture')).toBeInTheDocument()
     expect(screen.getByText('API Docs')).toBeInTheDocument()
   })
 
@@ -85,23 +84,12 @@ describe('Header', () => {
     const menuButton = screen.getByTitle('Menu')
     await user.click(menuButton)
 
-    expect(screen.getByText('Architecture')).toBeInTheDocument()
+    expect(screen.getByText('API Docs')).toBeInTheDocument()
 
     // Click outside
     await user.click(document.body)
 
-    expect(screen.queryByText('Architecture')).not.toBeInTheDocument()
-  })
-
-  it('should have correct link to architecture page', async () => {
-    const user = userEvent.setup()
-    renderWithRouter()
-
-    const menuButton = screen.getByTitle('Menu')
-    await user.click(menuButton)
-
-    const archLink = screen.getByText('Architecture')
-    expect(archLink.closest('a')).toHaveAttribute('href', '/architecture')
+    expect(screen.queryByText('API Docs')).not.toBeInTheDocument()
   })
 
   it('should have correct link to docs page', async () => {
@@ -122,8 +110,8 @@ describe('Header', () => {
     const menuButton = screen.getByTitle('Menu')
     await user.click(menuButton)
 
-    const archLink = screen.getByText('Architecture')
-    await user.click(archLink)
+    const docsLink = screen.getByText('API Docs')
+    await user.click(docsLink)
 
     // Menu should close after navigation
     // Note: In actual app, the route would change and menu would close

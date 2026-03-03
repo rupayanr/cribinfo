@@ -6,8 +6,10 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from starlette.middleware.base import BaseHTTPMiddleware
+from sqlalchemy import text
 
 from app.config import get_settings
+from app.models.database import async_session
 from app.api.routes import search, properties, cities
 from app.core.exceptions import CribInfoException
 from app.core.error_handlers import (
@@ -72,14 +74,39 @@ app.include_router(cities.router, prefix="/api/v1", tags=["cities"])
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
-    return {"status": "healthy"}
+    """Health check endpoint with dependency verification."""
+    checks = {"status": "healthy"}
+
+    # Verify database connection
+    try:
+        async with async_session() as db:
+            await db.execute(text("SELECT 1"))
+        checks["database"] = "ok"
+    except Exception as e:
+        logger.error(f"Health check database error: {e}")
+        checks["database"] = "failed"
+        checks["status"] = "unhealthy"
+
+    return checks
 
 
 @app.on_event("startup")
 async def startup_event():
-    """Log startup."""
+    """Verify critical services on startup."""
     logger.info("CribInfo API starting up...")
+
+    # Verify database connection
+    try:
+        async with async_session() as db:
+            await db.execute(text("SELECT 1"))
+        logger.info("Database connection verified")
+    except Exception as e:
+        logger.error(f"Database connection failed: {e}")
+        raise RuntimeError("Cannot start without database connection")
+
+    logger.info(f"Environment: {settings.environment}")
+    logger.info(f"LLM Provider: {settings.llm_provider}")
+    logger.info(f"Embedding Provider: {settings.embedding_provider}")
 
 
 @app.on_event("shutdown")

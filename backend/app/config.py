@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import model_validator
 from functools import lru_cache
 import json
 
@@ -8,7 +9,7 @@ class Settings(BaseSettings):
 
     # Provider selection (ollama for local, groq for production)
     llm_provider: str = "ollama"  # "ollama" or "groq"
-    embedding_provider: str = "ollama"  # "ollama" or "none" (SQL-only search)
+    embedding_provider: str = "ollama"  # "ollama", "jina", or "none" (SQL-only search)
 
     # Ollama settings (local development)
     ollama_host: str = "http://localhost:11434"
@@ -29,6 +30,16 @@ class Settings(BaseSettings):
 
     # Environment
     environment: str = "development"  # "development" or "production"
+
+    @model_validator(mode='after')
+    def validate_production_config(self):
+        """Validate that required API keys are set in production mode."""
+        if self.is_production:
+            if self.llm_provider == "groq" and not self.groq_api_key:
+                raise ValueError("GROQ_API_KEY is required when using Groq provider in production")
+            if self.embedding_provider == "jina" and not self.jina_api_key:
+                raise ValueError("JINA_API_KEY is required when using Jina provider in production")
+        return self
 
     @property
     def cors_origins_list(self) -> list[str]:

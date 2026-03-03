@@ -2,139 +2,248 @@
 
 Housing search powered by AI. Search for properties using natural language across multiple cities.
 
-![CribInfo Preview](preview.png)
+## Features
 
-## ✨ Features
+- **Natural Language Search** - Query like "2BHK under 1Cr with gym"
+- **Smart Filters** - Auto-extracts BHK, price, area, amenities
+- **Map View** - See properties on an interactive map
+- **Compare** - Side-by-side property comparison
+- **Multi-City** - Bangalore, Mumbai, Delhi supported
+- **Secure** - Rate limiting, HTTPS, CSP protection
 
-- **Natural Language Search** — "2BHK under 1Cr with gym"
-- **Smart Filters** — Auto-extracts BHK, price, area, amenities
-- **Map View** — See properties on an interactive map
-- **Compare** — Side-by-side property comparison (Cards & Table views)
-- **Multi-City** — Bangalore, Mumbai, Delhi supported
-- **Secure** — Rate limiting, HTTPS, CSP protection
+## Tech Stack
 
-## 🛠 Tech Stack
+| Layer | Technology |
+|-------|------------|
+| Frontend | React, TypeScript, Leaflet, Tailwind |
+| Backend | FastAPI, PostgreSQL, pgvector |
+| AI | Ollama/Groq LLM + Jina/Ollama Embeddings |
+| Hosting | Vercel (FE), Render (BE), Neon (DB) |
 
-**Frontend:** React, TypeScript, Leaflet, Tailwind
-**Backend:** FastAPI, PostgreSQL, pgvector
-**AI:** Ollama/Groq LLM + Jina/Ollama Embeddings
+## Architecture
 
-## 🏙️ Available Cities
+### System Overview
 
-- [x] Bangalore (75 listings)
-- [x] Mumbai (75 listings)
-- [x] Delhi (75 listings)
+```
++----------------+     +------------------+     +-------------------+
+|                |     |                  |     |                   |
+|  React SPA     +---->+  FastAPI Backend +---->+  PostgreSQL       |
+|  (Vercel)      |     |  (Render)        |     |  + pgvector       |
+|                |     |                  |     |  (Neon)           |
++----------------+     +--------+---------+     +-------------------+
+                                |
+                                v
+                 +--------------+--------------+
+                 |                             |
+         +-------v-------+           +---------v---------+
+         |               |           |                   |
+         |  LLM Provider |           | Embedding Provider|
+         |  (Groq/Ollama)|           | (Jina AI/Ollama)  |
+         |               |           |                   |
+         +---------------+           +-------------------+
+```
 
-## 🚀 Quick Start
+### RAG Pipeline
 
-**Backend:**
+```
+User Query: "2BHK under 1Cr with gym"
+                    |
+                    v
+    +-------------------------------+
+    |       Query Parser (LLM)      |
+    |  Extract: bhk=2, max_price=100|
+    |           amenities=[gym]     |
+    +---------------+---------------+
+                    |
+                    v
+    +-------------------------------+
+    |     Embedding Generator       |
+    |     768-dim vector            |
+    +---------------+---------------+
+                    |
+                    v
+    +-------------------------------+
+    |       Hybrid Search           |
+    |  Vector similarity + SQL      |
+    +---------------+---------------+
+                    |
+                    v
+            Top 10 Results
+```
+
+### Search Strategy (Filter Relaxation)
+
+```
++-------------------+
+| Exact Match       |  All filters + vector similarity
++---------+---------+
+          | No results
+          v
++---------+---------+
+| Relax BHK         |  Keep area + price
++---------+---------+
+          | No results
+          v
++---------+---------+
+| Relax Area        |  Keep BHK + price
++---------+---------+
+          | No results
+          v
++---------+---------+
+| Price Only        |  Keep city + price range
++---------+---------+
+          | No results
+          v
++---------+---------+
+| Semantic Fallback |  Pure vector similarity
++-------------------+
+```
+
+### Backend Module Structure
+
+```
+backend/
+  app/
+    api/
+      routes/
+        search.py        POST /api/v1/search
+        properties.py    GET  /api/v1/properties/{id}
+        cities.py        GET  /api/v1/cities
+    core/
+      query_parser.py    LLM-based filter extraction
+      search_engine.py   Hybrid search logic
+      embeddings.py      Vector generation
+    providers/
+      llm.py             Groq / Ollama abstraction
+      embeddings.py      Jina AI / Ollama abstraction
+    models/
+      property.py        SQLAlchemy model
+      database.py        Connection pool
+    repositories/
+      property_repo.py   Data access layer
+```
+
+### Frontend Component Tree
+
+```
+App
+ |-- Layout
+      |-- Header
+      |    |-- CitySelector
+      |    |-- ThemeToggle
+      |
+      |-- HomePage
+           |-- ChatContainer
+           |    |-- WelcomeMessage
+           |    |-- ChatMessage
+           |    |    |-- FilterBadges
+           |    |    |-- MessagePropertyCard
+           |    |    |-- ChatMapWidget
+           |    |-- ChatInput
+           |    |-- TypingIndicator
+           |
+           |-- CompareView
+```
+
+### Database Schema
+
+```
++------------------+
+|    properties    |
++------------------+
+| id         UUID  |  PK
+| city       VARCHAR|
+| title      VARCHAR|
+| area       VARCHAR|
+| bhk        INT    |
+| sqft       INT    |
+| bathrooms  INT    |
+| price_lakhs DECIMAL|
+| amenities  TEXT[] |
+| latitude   DECIMAL|
+| longitude  DECIMAL|
+| embedding  VECTOR |  768 dimensions
++------------------+
+```
+
+## Quick Start
+
+### Backend
+
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Set environment variables
-export DATABASE_URL=postgresql+asyncpg://...
-export OPENAI_API_KEY=sk-...
+# Set environment variables (see .env.example)
+cp .env.example .env
 
 # Load data
-python scripts/load_data.py --city bangalore
+python scripts/load_data.py --all
 
 # Start server
 uvicorn app.main:app --reload
 ```
 
-**Frontend:**
+### Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## 🔍 How It Works
+## API Endpoints
 
-```
-"2BHK under 1Cr gym"
-         │
-         ▼
-┌─────────────────────┐
-│  GPT-4 Query Parser │
-│  bhk=2, max=100,    │
-│  amenities=[gym]    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Vector Similarity  │
-│  + SQL Filters      │
-└──────────┬──────────┘
-           │
-           ▼
-    Top 10 Results
-```
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | /api/v1/search | Natural language property search |
+| GET | /api/v1/properties/{id} | Get property details |
+| POST | /api/v1/compare | Compare multiple properties |
+| GET | /api/v1/cities | List available cities |
+| GET | /api/v1/cities/{city}/areas | List areas in a city |
 
-## 📁 Project Structure
+## Environment Variables
 
-```
-cribinfo/
-├── frontend/
-│   └── src/
-│       ├── components/
-│       │   ├── Search/
-│       │   ├── Property/
-│       │   └── Map/
-│       └── hooks/
-└── backend/
-    ├── app/
-    │   ├── api/
-    │   └── core/
-    ├── scripts/
-    └── data/
-```
+### Backend (.env)
 
-## 🔧 Environment Variables
-
-**Backend (.env):**
 ```
 DATABASE_URL=postgresql+asyncpg://...
-ENVIRONMENT=development  # or "production"
-LLM_PROVIDER=ollama      # or "groq"
-EMBEDDING_PROVIDER=ollama # or "jina"
-GROQ_API_KEY=gsk-...     # for production
-JINA_API_KEY=jina_...    # for production embeddings
+ENVIRONMENT=development
+LLM_PROVIDER=ollama
+EMBEDDING_PROVIDER=ollama
+GROQ_API_KEY=gsk_...
+JINA_API_KEY=jina_...
 ```
 
-**Frontend (.env):**
+### Frontend (.env)
+
 ```
 VITE_API_URL=http://localhost:8000
 ```
 
-**Production Notes:**
-- HTTPS is enforced via HSTS headers
-- CORS is restricted to production domain
-- Rate limiting: 30 req/min (search), 60 req/min (other endpoints)
-
-## 📊 API
-
-```
-POST /api/v1/search          # NLP property search
-GET  /api/v1/properties/{id} # Property details
-POST /api/v1/compare         # Compare properties
-GET  /api/v1/cities          # Available cities
-```
-
-## 🗺️ Sample Searches
+## Sample Searches
 
 - "3BHK in Koramangala with pool"
 - "Apartment near tech park under 50 lakhs"
 - "Family home with parking"
 - "Studio in city center"
 
-## 📝 License
+## Available Cities
+
+- Bangalore (75 listings)
+- Mumbai (75 listings)
+- Delhi (75 listings)
+
+## Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for full deployment guide using free tier services.
+
+## License
 
 MIT
 
 ---
 
-Made with ❤️ by [Rupayan Roy](https://linkedin.com/in/rupayan-roy)
+Made by [Rupayan Roy](https://linkedin.com/in/rupayan-roy)

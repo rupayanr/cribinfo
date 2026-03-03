@@ -44,12 +44,28 @@ async def generate_embeddings_for_city(city: str, batch_size: int = 50):
 
 async def main():
     parser = argparse.ArgumentParser(description="Generate embeddings for properties")
-    parser.add_argument("--city", required=True, help="City name (e.g., bangalore)")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--city", help="City name (e.g., bangalore)")
+    group.add_argument("--all", action="store_true", help="Generate embeddings for all cities")
     parser.add_argument("--batch-size", type=int, default=50, help="Batch size for commits")
     args = parser.parse_args()
 
-    print(f"Generating embeddings for {args.city}...")
-    await generate_embeddings_for_city(args.city, args.batch_size)
+    if args.all:
+        # Generate for all cities
+        from sqlalchemy import distinct
+        async with async_session() as db:
+            stmt = select(distinct(Property.city))
+            result = await db.execute(stmt)
+            cities = [row[0] for row in result.fetchall()]
+
+        print(f"Found cities: {cities}")
+        for city in cities:
+            print(f"\nGenerating embeddings for {city}...")
+            await generate_embeddings_for_city(city, args.batch_size)
+        print(f"\nCompleted generating embeddings for all {len(cities)} cities")
+    else:
+        print(f"Generating embeddings for {args.city}...")
+        await generate_embeddings_for_city(args.city, args.batch_size)
 
 
 if __name__ == "__main__":

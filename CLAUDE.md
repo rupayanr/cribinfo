@@ -29,8 +29,12 @@ Housing search powered by RAG. Natural language queries like "2BHK under 1Cr wit
 
 ### Infrastructure
 - Vercel (frontend)
-- Railway (backend)
+- Render (backend)
 - Neon (PostgreSQL with pgvector)
+- Groq (LLM - production)
+- Jina AI (embeddings - production)
+
+**See `DEPLOYMENT.md` for full deployment guide.**
 
 ---
 
