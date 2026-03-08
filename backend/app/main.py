@@ -41,10 +41,26 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+tags_metadata = [
+    {
+        "name": "search",
+        "description": "Natural language property search with AI-powered query parsing",
+    },
+    {
+        "name": "properties",
+        "description": "Property details and comparison endpoints",
+    },
+    {
+        "name": "cities",
+        "description": "Available cities and their areas",
+    },
+]
+
 app = FastAPI(
     title="CribInfo API",
-    description="Housing search powered by RAG",
+    description="Housing search powered by RAG. Use natural language queries to find properties.",
     version="1.0.0",
+    openapi_tags=tags_metadata,
 )
 
 # Set up rate limiter
