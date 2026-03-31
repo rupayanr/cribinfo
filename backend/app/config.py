@@ -7,6 +7,17 @@ import json
 class Settings(BaseSettings):
     database_url: str
 
+    @property
+    def async_database_url(self) -> str:
+        """Convert standard PostgreSQL URL to asyncpg format."""
+        url = self.database_url
+        # Convert postgresql:// to postgresql+asyncpg://
+        if url.startswith("postgresql://") and "+asyncpg" not in url:
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        # Convert sslmode=require to ssl=require for asyncpg
+        url = url.replace("sslmode=require", "ssl=require")
+        return url
+
     # Provider selection (ollama for local, groq for production)
     llm_provider: str = "ollama"  # "ollama" or "groq"
     embedding_provider: str = "ollama"  # "ollama", "jina", or "none" (SQL-only search)

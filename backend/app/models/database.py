@@ -9,7 +9,7 @@ settings = get_settings()
 # - pool_pre_ping: Verify connection is alive before using (handles Neon sleep)
 # - pool_recycle: Recycle connections every 5 min to handle Neon sleep cycles
 engine = create_async_engine(
-    settings.database_url,
+    settings.async_database_url,
     echo=False,
     pool_size=5,
     max_overflow=10,
