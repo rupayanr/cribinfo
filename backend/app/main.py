@@ -113,12 +113,17 @@ async def startup_event():
 
     # Verify database connection
     try:
+        # Log the URL format (mask password)
+        db_url = settings.async_database_url
+        masked_url = db_url.split('@')[0].rsplit(':', 1)[0] + ':***@' + db_url.split('@')[1] if '@' in db_url else db_url
+        logger.info(f"Connecting to database: {masked_url}")
+
         async with async_session() as db:
             await db.execute(text("SELECT 1"))
         logger.info("Database connection verified")
     except Exception as e:
-        logger.error(f"Database connection failed: {e}")
-        raise RuntimeError("Cannot start without database connection")
+        logger.error(f"Database connection failed: {type(e).__name__}: {e}")
+        raise RuntimeError(f"Cannot start without database connection: {e}")
 
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"LLM Provider: {settings.llm_provider}")
