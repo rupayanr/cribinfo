@@ -10,13 +10,39 @@ class Settings(BaseSettings):
     @property
     def async_database_url(self) -> str:
         """Convert standard PostgreSQL URL to asyncpg format."""
+        from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+
         url = self.database_url
+
         # Convert postgresql:// to postgresql+asyncpg://
         if url.startswith("postgresql://") and "+asyncpg" not in url:
             url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
-        # Convert sslmode=require to ssl=require for asyncpg
-        url = url.replace("sslmode=require", "ssl=require")
-        return url
+
+        # Parse URL to handle query params
+        parsed = urlparse(url)
+        params = parse_qs(parsed.query)
+
+        # Convert and filter params for asyncpg compatibility
+        new_params = {}
+        for key, values in params.items():
+            value = values[0] if values else ""
+            # Convert sslmode to ssl
+            if key == "sslmode":
+                new_params["ssl"] = "true" if value == "require" else value
+            # Skip params that asyncpg doesn't support
+            elif key in ("channel_binding", "options"):
+                continue
+            else:
+                new_params[key] = value
+
+        # Ensure SSL is enabled for Neon
+        if "ssl" not in new_params and "neon.tech" in (parsed.hostname or ""):
+            new_params["ssl"] = "true"
+
+        # Rebuild URL
+        new_query = urlencode(new_params)
+        new_parsed = parsed._replace(query=new_query)
+        return urlunparse(new_parsed)
 
     # Provider selection (ollama for local, groq for production)
     llm_provider: str = "ollama"  # "ollama" or "groq"
