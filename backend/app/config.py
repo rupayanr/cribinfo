@@ -26,18 +26,16 @@ class Settings(BaseSettings):
         new_params = {}
         for key, values in params.items():
             value = values[0] if values else ""
-            # Convert sslmode to ssl
-            if key == "sslmode":
-                new_params["ssl"] = "true" if value == "require" else value
             # Skip params that asyncpg doesn't support
-            elif key in ("channel_binding", "options"):
+            if key in ("channel_binding", "options"):
                 continue
+            # Keep sslmode as-is (asyncpg supports it)
             else:
                 new_params[key] = value
 
         # Ensure SSL is enabled for Neon
-        if "ssl" not in new_params and "neon.tech" in (parsed.hostname or ""):
-            new_params["ssl"] = "true"
+        if "sslmode" not in new_params and "neon.tech" in (parsed.hostname or ""):
+            new_params["sslmode"] = "require"
 
         # Rebuild URL
         new_query = urlencode(new_params)
