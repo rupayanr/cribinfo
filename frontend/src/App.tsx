@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout/Layout'
 import { HomePage } from './pages/HomePage'
-import { DocsPage } from './pages/DocsPage'
+import { ArchitecturePage } from './pages/ArchitecturePage'
 import { WelcomeModal } from './components/WelcomeModal/WelcomeModal'
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/docs" element={<DocsPage />} />
+          <Route path="/architecture" element={<ArchitecturePage />} />
         </Route>
       </Routes>
     </>
