@@ -13,7 +13,7 @@ vi.mock('../components/Toast', () => ({
 
 // Mock fetch
 const mockFetch = vi.fn()
-global.fetch = mockFetch
+globalThis.fetch = mockFetch
 
 describe('useSearch', () => {
   beforeEach(() => {

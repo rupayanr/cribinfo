@@ -97,7 +97,7 @@ const SAFE_ERROR_MESSAGES = new Set([
   'Property not found',
 ])
 
-function sanitizeErrorMessage(message: string): string {
+function _sanitizeErrorMessage(message: string): string {
   // Only return the message if it's in our safe whitelist
   if (SAFE_ERROR_MESSAGES.has(message)) {
     return message
