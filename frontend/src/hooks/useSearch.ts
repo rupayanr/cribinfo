@@ -87,6 +87,16 @@ function generateResponseText(
 }
 
 // Whitelist of safe error messages that can be shown to users
+const SAFE_ERROR_MESSAGES = new Set([
+  'Invalid search query. Please try again with different terms.',
+  'Too many requests. Please wait a moment and try again.',
+  'Search service is temporarily unavailable. Please try again later.',
+  'An unexpected error occurred. Please try again.',
+  'At least 2 properties required for comparison',
+  'Maximum 5 properties can be compared',
+  'Property not found',
+])
+
 function getErrorMessage(status: number, apiError?: ApiError): string {
   // Use status code to determine the appropriate generic message
   // Don't expose raw API error messages that might contain system details
