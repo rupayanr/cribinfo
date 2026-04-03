@@ -58,7 +58,6 @@ class Settings(BaseSettings):
 
     # CORS and defaults
     cors_origins: str = '["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]'
-    cors_origins_production: str = '["https://cribinfo.rupayan.dev"]'
     default_city: str = "bangalore"
 
     # Environment
@@ -76,9 +75,7 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> list[str]:
-        """Return appropriate CORS origins based on environment."""
-        if self.is_production:
-            return json.loads(self.cors_origins_production)
+        """Return CORS origins from environment variable."""
         return json.loads(self.cors_origins)
 
     @property
