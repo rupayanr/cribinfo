@@ -44,3 +44,40 @@ body {
 .dark .swagger-ui svg:not(.model-toggle) {
   filter: invert(100%) hue-rotate(180deg);
 }
+
+/* Mermaid diagram dark mode text fixes */
+.dark .mermaid-container text,
+.dark .mermaid-container tspan {
+  fill: #F3F4F6 !important;
+}
+
+.dark .mermaid-container .messageText {
+  fill: #F3F4F6 !important;
+}
+
+.dark .mermaid-container text.actor > tspan {
+  fill: #F3F4F6 !important;
+}
+
+.dark .mermaid-container .loopText,
+.dark .mermaid-container .loopText tspan,
+.dark .mermaid-container .labelText,
+.dark .mermaid-container .labelText tspan {
+  fill: #F3F4F6 !important;
+}
+
+.dark .mermaid-container .noteText {
+  fill: #FEF3C7 !important;
+}
+
+.dark .mermaid-container .nodeLabel,
+.dark .mermaid-container .edgeLabel,
+.dark .mermaid-container .label,
+.dark .mermaid-container .cluster-label,
+.dark .mermaid-container .entityLabel {
+  fill: #F3F4F6 !important;
+}
+
+.dark .mermaid-container foreignObject div {
+  color: #F3F4F6 !important;
+}
